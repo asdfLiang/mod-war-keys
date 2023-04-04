@@ -3,6 +3,7 @@ package com.example.front.controller;
 import com.example.back.api.HotKeyService;
 import com.example.back.api.TranslationService;
 import com.example.back.model.CmdHotKeyVO;
+import com.example.commons.utils.StringUtil;
 
 import de.felixroske.jfxsupport.FXMLController;
 
@@ -34,9 +35,9 @@ public class ModKeyController implements Initializable {
 
     @FXML private TableView<CmdHotKeyVO> tableView = new TableView<>();
 
-    @FXML private TableColumn cmd = new TableColumn();
-    @FXML private TableColumn cmdName = new TableColumn();
-    @FXML private TableColumn hotKey = new TableColumn();
+    @FXML private TableColumn<CmdHotKeyVO, String> cmd = new TableColumn<>();
+    @FXML private TableColumn<CmdHotKeyVO, String> cmdName = new TableColumn<>();
+    @FXML private TableColumn<CmdHotKeyVO, String> hotKey = new TableColumn<>();
 
     public ModKeyController(HotKeyService hotKeyService, TranslationService translationService) {
         this.hotKeyService = hotKeyService;
@@ -57,12 +58,22 @@ public class ModKeyController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         bindColumnData();
+        newDaemonThread(translationService::perfectTranslation).start();
+        if (StringUtil.isNotBlank(configPathInput.getText())) {
+            onReadConfigBtnClick();
+        }
     }
 
     /** 绑定每列的数据 */
     private void bindColumnData() {
-        cmd.setCellValueFactory(new PropertyValueFactory<CmdHotKeyVO, String>("cmd"));
-        cmdName.setCellValueFactory(new PropertyValueFactory<CmdHotKeyVO, String>("cmdName"));
-        hotKey.setCellValueFactory(new PropertyValueFactory<CmdHotKeyVO, String>("hotKey"));
+        cmd.setCellValueFactory(new PropertyValueFactory<>("cmd"));
+        cmdName.setCellValueFactory(new PropertyValueFactory<>("cmdName"));
+        hotKey.setCellValueFactory(new PropertyValueFactory<>("hotKey"));
+    }
+
+    private Thread newDaemonThread(Runnable runnable) {
+        Thread thread = new Thread(runnable);
+        thread.setDaemon(true);
+        return thread;
     }
 }

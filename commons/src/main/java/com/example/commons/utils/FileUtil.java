@@ -14,6 +14,10 @@ import java.util.stream.Collectors;
  */
 public class FileUtil {
 
+    public static Path getPath(String dir, String fileName) {
+        return Paths.get(dir, fileName);
+    }
+
     public static boolean isFile(String path) {
         // TODO
         return true;

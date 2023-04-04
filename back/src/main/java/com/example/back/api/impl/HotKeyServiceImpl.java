@@ -5,11 +5,15 @@ import com.example.back.model.CmdHotKeyVO;
 import com.example.back.model.RefHotKey;
 import com.example.back.support.CustomKeysHelper;
 import com.example.commons.utils.FileUtil;
+import com.example.commons.utils.PropertiesUtil;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.nio.file.Path;
 import java.util.List;
+import java.util.Properties;
 import java.util.stream.Collectors;
 
 /**
@@ -18,6 +22,12 @@ import java.util.stream.Collectors;
  */
 @Service
 public class HotKeyServiceImpl implements HotKeyService {
+
+    @Value("${translation.file.dir}")
+    private String dir;
+
+    @Value("${translation.file.name}")
+    private String fileName;
 
     @Override
     public List<CmdHotKeyVO> load(String configFilePath) {
@@ -32,8 +42,10 @@ public class HotKeyServiceImpl implements HotKeyService {
             throw new RuntimeException("配置文件为空！");
         }
 
+        // 读取指令翻译
+        Properties trans = PropertiesUtil.load(Path.of(dir, fileName));
         return refHotKeys.stream()
-                .map(key -> new CmdHotKeyVO(key.getCmd(), key.getCmd(), key.getHotKey()))
+                .map(x -> new CmdHotKeyVO(x.getCmd(), trans.getProperty(x.getCmd()), x.getHotKey()))
                 .collect(Collectors.toList());
     }
 }
