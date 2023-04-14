@@ -3,9 +3,9 @@ package com.example.transaction.instances;
 import com.alibaba.fastjson2.JSON;
 import com.example.transaction.Translator;
 import com.example.transaction.TranslatorTemplate;
-
 import com.example.transaction.enums.LanguageEnum;
 import com.example.transaction.enums.TranslatorEnum;
+
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -44,7 +44,7 @@ public class DeepLTranslator extends TranslatorTemplate implements Translator {
         String text = params.get("text");
         String to = params.get("to");
 
-        return String.format(format(), text, to);
+        return String.format(format(), text, to, System.currentTimeMillis());
     }
 
     @Override
@@ -132,7 +132,7 @@ public class DeepLTranslator extends TranslatorTemplate implements Translator {
                         "mode": "translate",
                         "browserType": 1
                     },
-                    "timestamp": 1679686540596
+                    "timestamp": %d
                 },
                 "id": 74870015
             }

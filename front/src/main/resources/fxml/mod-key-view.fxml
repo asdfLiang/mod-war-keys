@@ -2,7 +2,7 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.AnchorPane?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17"
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="449.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17"
             fx:controller="com.example.front.controller.ModKeyController">
 
     <!--    <TextField fx:id="configPathInput" alignment="TOP_LEFT" layoutX="65.0" layoutY="34.0" prefHeight="23.0"-->
@@ -22,5 +22,11 @@
             <TableColumn fx:id="hotKey" prefWidth="125.0" sortable="false" text="快捷键"/>
         </columns>
     </TableView>
+
+    <Button fx:id="submitBtn" alignment="TOP_LEFT" layoutX="441.0" layoutY="398.0" onAction="#onReadConfigBtnClick"
+            text="确定"/>
+
+    <Button fx:id="cancelBtn" alignment="TOP_LEFT" layoutX="497.0" layoutY="398.0" onAction="#onReadConfigBtnClick"
+            text="取消"/>
 
 </AnchorPane>

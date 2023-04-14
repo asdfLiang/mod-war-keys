@@ -1,9 +1,7 @@
 package com.example.back.support;
 
-import static com.example.back.common.constants.MarkConstant.CMD_STARTS;
-import static com.example.back.common.constants.MarkConstant.HOTKEY_START;
+import static com.example.back.common.constants.MarkConstant.*;
 
-import com.example.back.common.enums.RaceEnum;
 import com.example.back.model.RefHotKey;
 
 import lombok.extern.slf4j.Slf4j;
@@ -38,21 +36,6 @@ public class CustomKeysHelper {
         this.filePath = fullPath();
     }
 
-    /**
-     * 按照种族读取配置
-     *
-     * @param race 种族
-     * @return 该种族的配置
-     */
-    public String readRaceKeys(RaceEnum race) throws FileNotFoundException {
-        BufferedReader reader =
-                new BufferedReader(new InputStreamReader(new FileInputStream(filePath)));
-
-        // 读取一组配置
-
-        return null;
-    }
-
     public List<RefHotKey> readHotKeys() {
         try (BufferedReader reader =
                 new BufferedReader(new InputStreamReader(new FileInputStream(filePath)))) {
@@ -78,7 +61,7 @@ public class CustomKeysHelper {
         // 当前行号
         Integer row = -1;
         // 当前行数据，指令
-        String line, cmd = "";
+        String line, cmd = "", comments = "";
         // 用来存放当前配置的所有快捷键
         List<RefHotKey> refHotKeys = new ArrayList<>();
 
@@ -86,13 +69,19 @@ public class CustomKeysHelper {
             line = line.trim();
             row++;
             // 获取指令的热键配置，根据热键
-            if (line.startsWith(CMD_STARTS)) {
+            if (line.startsWith(COMMENTS_START)) {
+                comments = getComments(line);
+            } else if (line.startsWith(CMD_STARTS)) {
                 cmd = getCmd(line);
             } else if (line.startsWith(HOTKEY_START)) {
-                refHotKeys.add(new RefHotKey(row, cmd, getHotKey(line)).require());
+                refHotKeys.add(new RefHotKey(row, cmd, comments, getHotKey(line)).require());
             }
         }
         return refHotKeys;
+    }
+
+    private static String getComments(String line) {
+        return line.replaceFirst("// ", "");
     }
 
     private static String getCmd(String line) {

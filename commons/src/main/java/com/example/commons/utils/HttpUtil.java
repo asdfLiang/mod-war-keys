@@ -29,8 +29,7 @@ public class HttpUtil {
             HttpRequest.Builder builder = HttpRequest.newBuilder();
             builder.uri(URI.create(uri));
             if (!CollectionUtils.isEmpty(headers)) {
-                headers.entrySet()
-                        .forEach(header -> builder.header(header.getKey(), header.getValue()));
+                headers.forEach(builder::header);
             }
             HttpRequest request = builder.POST(HttpRequest.BodyPublishers.ofString(body)).build();
 

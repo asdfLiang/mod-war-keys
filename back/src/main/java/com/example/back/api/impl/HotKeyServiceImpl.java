@@ -45,7 +45,13 @@ public class HotKeyServiceImpl implements HotKeyService {
         // 读取指令翻译
         Properties trans = PropertiesUtil.load(Path.of(dir, fileName));
         return refHotKeys.stream()
-                .map(x -> new CmdHotKeyVO(x.getCmd(), trans.getProperty(x.getCmd()), x.getHotKey()))
+                .map(
+                        x ->
+                                new CmdHotKeyVO(
+                                        x.getCmd(),
+                                        x.getComments(),
+                                        trans.getProperty(x.getCmd()),
+                                        x.getHotKey()))
                 .collect(Collectors.toList());
     }
 }

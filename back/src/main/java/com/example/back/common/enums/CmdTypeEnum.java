@@ -18,6 +18,6 @@ public enum CmdTypeEnum {
     Skill(3, "技能"),
     ;
 
-    private Integer code;
-    private String desc;
+    private final Integer code;
+    private final String desc;
 }

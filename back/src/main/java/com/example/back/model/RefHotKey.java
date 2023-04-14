@@ -1,6 +1,7 @@
 package com.example.back.model;
 
 import com.example.commons.utils.StringUtil;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,6 +24,9 @@ public class RefHotKey {
 
     /** 指令 */
     private String cmd;
+
+    /** 指令说明 */
+    private String comments;
 
     /** 热键 */
     private String hotKey;

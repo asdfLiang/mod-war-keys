@@ -1,5 +1,7 @@
 package com.example.transaction;
 
+import com.example.commons.utils.StringUtil;
+
 import java.net.http.HttpResponse;
 import java.util.HashMap;
 
@@ -13,6 +15,10 @@ public abstract class TranslatorTemplate extends PostTemplate implements Transla
 
     @Override
     public String translate(String text, String from, String to) {
+        if (StringUtil.isBlank(text)) {
+            return "";
+        }
+
         HashMap<String, String> params = new HashMap<>();
         params.put("text", text);
         params.put("from", from);

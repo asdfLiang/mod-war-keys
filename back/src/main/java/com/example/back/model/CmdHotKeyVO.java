@@ -18,8 +18,11 @@ public class CmdHotKeyVO {
     /** 指令 */
     private String cmd;
 
-    /** 指令名称 */
-    private String cmdName;
+    /** 指令说明 */
+    private String comments;
+
+    /** 指令说明翻译 */
+    private String translation;
 
     /** 热键 */
     private String hotKey;

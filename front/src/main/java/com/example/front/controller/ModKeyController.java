@@ -30,6 +30,19 @@ public class ModKeyController implements Initializable {
 
     private final TranslationService translationService;
 
+    public ModKeyController(HotKeyService hotKeyService, TranslationService translationService) {
+        this.hotKeyService = hotKeyService;
+        this.translationService = translationService;
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        bindColumnData();
+        if (StringUtil.isNotBlank(configPathInput.getText())) {
+            onReadConfigBtnClick();
+        }
+    }
+
     /** 配置路径输入框 */
     @FXML private TextField configPathInput;
 
@@ -39,35 +52,21 @@ public class ModKeyController implements Initializable {
     @FXML private TableColumn<CmdHotKeyVO, String> cmdName = new TableColumn<>();
     @FXML private TableColumn<CmdHotKeyVO, String> hotKey = new TableColumn<>();
 
-    public ModKeyController(HotKeyService hotKeyService, TranslationService translationService) {
-        this.hotKeyService = hotKeyService;
-        this.translationService = translationService;
-    }
-
     /** 点击读取配置 */
     @FXML
     protected void onReadConfigBtnClick() {
-        List<CmdHotKeyVO> hotKeys = hotKeyService.load(configPathInput.getText());
+        String filePath = configPathInput.getText();
+        List<CmdHotKeyVO> hotKeys = hotKeyService.load(filePath);
 
         // 初始化翻译文本
-        translationService.tryInitTranslationText(hotKeys);
-
+        newDaemonThread(() -> translationService.perfectTranslation(hotKeys)).start();
         tableView.setItems(FXCollections.observableList(hotKeys));
-    }
-
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        bindColumnData();
-        newDaemonThread(translationService::perfectTranslation).start();
-        if (StringUtil.isNotBlank(configPathInput.getText())) {
-            onReadConfigBtnClick();
-        }
     }
 
     /** 绑定每列的数据 */
     private void bindColumnData() {
         cmd.setCellValueFactory(new PropertyValueFactory<>("cmd"));
-        cmdName.setCellValueFactory(new PropertyValueFactory<>("cmdName"));
+        cmdName.setCellValueFactory(new PropertyValueFactory<>("translation"));
         hotKey.setCellValueFactory(new PropertyValueFactory<>("hotKey"));
     }
 

@@ -12,10 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.Path;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * @since 2023/3/25 12:41
@@ -36,37 +33,16 @@ public class TranslationServiceImpl implements TranslationService {
     }
 
     @Override
-    public void tryInitTranslationText(List<CmdHotKeyVO> hotKeys) {
-
+    public void perfectTranslation(List<CmdHotKeyVO> hotKeys) {
         Path path = FileUtil.getPath(dir, fileName);
         // 读取翻译文本
         Properties local = PropertiesUtil.load(path);
-        if (local.size() == hotKeys.size()) {
-            return;
-        }
 
-        // 写入待翻译文本
-        for (CmdHotKeyVO hotKey : hotKeys) {
-            local.put(
-                    hotKey.getCmd(), Optional.ofNullable(local.get(hotKey.getHotKey())).orElse(""));
-        }
-        PropertiesUtil.store(path, local, "init");
-    }
-
-    @Override
-    public void perfectTranslation() {
-
-        Path path = FileUtil.getPath(dir, fileName);
-        // 读取翻译文本
-        Properties local = PropertiesUtil.load(path);
-        if (local.isEmpty()) {
-            return;
-        }
-
-        local.forEach(
-                (key, value) -> {
-                    if (Objects.isNull(value) || "".equals(value)) {
-                        local.put(key, translate(key.toString().replaceFirst("Cmd", "")));
+        // 翻译
+        hotKeys.forEach(
+                vo -> {
+                    if (!local.containsKey(vo.getCmd())) {
+                        local.put(vo.getCmd(), translate(vo.getComments()));
                         PropertiesUtil.store(path, local, "translation...");
                     }
                 });
@@ -75,6 +51,6 @@ public class TranslationServiceImpl implements TranslationService {
     private String translate(String key) {
         return translatorFactory
                 .get(TranslatorEnum.DeepL)
-                .translate(key, LanguageEnum.JP.name(), LanguageEnum.ZH.name());
+                .translate(key, LanguageEnum.EN.name(), LanguageEnum.ZH.name());
     }
 }
