@@ -8,6 +8,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @since 2023/3/25 13:43
@@ -35,9 +36,41 @@ public class HttpUtil {
 
             // 请求
             return HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
-        } catch (IOException e) {
+        } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
-        } catch (InterruptedException e) {
+        }
+    }
+
+    /**
+     * 执行post请求
+     *
+     * @param uri
+     * @param headers
+     * @param params
+     * @return
+     */
+    public static HttpResponse<String> get(
+            String uri, Map<String, String> headers, Map<String, String> params) {
+        try {
+            // 构建请求参数
+            HttpRequest.Builder builder = HttpRequest.newBuilder();
+            if (!CollectionUtils.isEmpty(params)) {
+                String query =
+                        params.entrySet().stream()
+                                .map(entry -> entry.getKey() + "=" + entry.getValue())
+                                .collect(Collectors.joining("&"));
+                uri = uri + "?" + query;
+            }
+            builder.uri(URI.create(uri));
+            // header
+            if (!CollectionUtils.isEmpty(headers)) {
+                headers.forEach(builder::header);
+            }
+            HttpRequest request = builder.GET().build();
+
+            // 请求
+            return HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+        } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
     }

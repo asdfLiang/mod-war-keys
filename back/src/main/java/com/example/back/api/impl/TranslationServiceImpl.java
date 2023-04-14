@@ -50,7 +50,7 @@ public class TranslationServiceImpl implements TranslationService {
 
     private String translate(String key) {
         return translatorFactory
-                .get(TranslatorEnum.DeepL)
+                .get(TranslatorEnum.Microsoft)
                 .translate(key, LanguageEnum.EN.name(), LanguageEnum.ZH.name());
     }
 }

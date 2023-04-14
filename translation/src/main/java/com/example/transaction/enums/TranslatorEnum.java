@@ -10,7 +10,9 @@ import java.util.Arrays;
  */
 public enum TranslatorEnum {
     Baidu,
-    DeepL;
+    DeepL,
+    Microsoft,
+    ;
 
     /**
      * 默认DeepL

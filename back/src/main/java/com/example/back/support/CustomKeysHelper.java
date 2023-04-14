@@ -10,6 +10,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.regex.Pattern;
 
 /**
  * 自定义配置文件操作工具
@@ -69,7 +70,7 @@ public class CustomKeysHelper {
             line = line.trim();
             row++;
             // 获取指令的热键配置，根据热键
-            if (line.startsWith(COMMENTS_START)) {
+            if (Pattern.matches(COMMENTS_START_REGEX, line)) {
                 comments = getComments(line);
             } else if (line.startsWith(CMD_STARTS)) {
                 cmd = getCmd(line);
@@ -94,5 +95,12 @@ public class CustomKeysHelper {
 
     private String fullPath() {
         return dir + System.lineSeparator() + file;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(Pattern.matches(COMMENTS_START_REGEX, "////////////"));
+        System.out.println(Pattern.matches(COMMENTS_START_REGEX, "//abc"));
+        System.out.println(Pattern.matches(COMMENTS_START_REGEX, "// abc"));
+        System.out.println(Pattern.matches(COMMENTS_START_REGEX, "// abc&"));
     }
 }
