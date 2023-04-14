@@ -32,7 +32,7 @@ public class MicrosoftTranslator extends TranslatorTemplate implements Translato
 
     @Override
     protected Map<String, String> headers() {
-        authorization = Optional.ofNullable(authorization).orElse(getAuthorization());
+        authorization = Optional.ofNullable(authorization).orElseGet(this::getAuthorization);
         return new HashMap<>() {
             {
                 put("authorization", authorization);
@@ -67,14 +67,16 @@ public class MicrosoftTranslator extends TranslatorTemplate implements Translato
         return TranslatorEnum.Microsoft;
     }
 
+    private String getAuthorization() {
+        return "Bearer " + HttpUtil.get(authUrl, null, null).body();
+    }
+
     public static void main(String[] args) {
-        Translator translator = new MicrosoftTranslator();
+        MicrosoftTranslator translator = new MicrosoftTranslator();
+
+        System.out.println(translator.getAuthorization());
 
         System.out.println(translator.translate("こんにちは", null, LanguageEnum.ZH.name()));
         System.out.println(translator.translate("Hello World", null, LanguageEnum.ZH.name()));
-    }
-
-    private String getAuthorization() {
-        return "Bearer " + HttpUtil.get(authUrl, null, null).body();
     }
 }
