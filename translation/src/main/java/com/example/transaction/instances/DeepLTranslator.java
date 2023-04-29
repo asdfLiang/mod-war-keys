@@ -8,6 +8,7 @@ import com.example.transaction.enums.TranslatorEnum;
 
 import org.springframework.stereotype.Component;
 
+import java.net.http.HttpResponse;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,7 +41,7 @@ public class DeepLTranslator extends TranslatorTemplate implements Translator {
     }
 
     @Override
-    protected String body(Map<String, String> params) {
+    protected String preparedBody(Map<String, String> params) {
         String text = params.get("text");
         String to = params.get("to");
 
@@ -48,8 +49,8 @@ public class DeepLTranslator extends TranslatorTemplate implements Translator {
     }
 
     @Override
-    protected String parseResponseBody(String responseBody) {
-        return JSON.parseObject(responseBody)
+    protected String parseResponseBody(HttpResponse<String> response) {
+        return JSON.parseObject(response.body())
                 .getJSONObject("result")
                 .getJSONArray("translations")
                 .getJSONObject(0)

@@ -10,10 +10,8 @@ import com.example.transaction.enums.TranslatorEnum;
 
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.net.http.HttpResponse;
+import java.util.*;
 
 /**
  * @since 2023/4/14 20:56
@@ -42,10 +40,10 @@ public class MicrosoftTranslator extends TranslatorTemplate implements Translato
     }
 
     @Override
-    protected String body(Map<String, String> params) {
+    protected String preparedBody(Map<String, String> params) {
         String text = params.get("text");
 
-        ArrayList<Object> list = new ArrayList<>();
+        List<Object> list = new ArrayList<>();
         HashMap<Object, Object> map = new HashMap<>();
         map.put("Text", text);
         list.add(map);
@@ -54,8 +52,8 @@ public class MicrosoftTranslator extends TranslatorTemplate implements Translato
     }
 
     @Override
-    protected String parseResponseBody(String responseBody) {
-        return JSONArray.parse(responseBody)
+    protected String parseResponseBody(HttpResponse<String> response) {
+        return JSONArray.parse(response.body())
                 .getJSONObject(0)
                 .getJSONArray("translations")
                 .getJSONObject(0)

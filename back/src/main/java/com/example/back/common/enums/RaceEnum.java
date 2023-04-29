@@ -6,6 +6,7 @@ package com.example.back.common.enums;
  * @author by liangzj
  */
 public enum RaceEnum {
+    Shared,
     Human,
     Orc,
     Night,

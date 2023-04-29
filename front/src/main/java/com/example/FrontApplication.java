@@ -8,7 +8,9 @@ import javafx.stage.Stage;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.PropertySource;
 
+@PropertySource(value = {"file:D:\\liangzj\\Documents\\translation.properties"})
 @MapperScan(basePackages = {"com.example.dal.mapper"})
 @SpringBootApplication(
         scanBasePackages = {

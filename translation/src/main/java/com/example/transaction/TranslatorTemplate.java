@@ -11,7 +11,7 @@ import java.util.HashMap;
  * @since 2023/3/25 12:59
  * @author by liangzj
  */
-public abstract class TranslatorTemplate extends PostTemplate implements Translator {
+public abstract class TranslatorTemplate extends HttpTemplate implements Translator {
 
     @Override
     public String translate(String text, String from, String to) {
@@ -26,6 +26,6 @@ public abstract class TranslatorTemplate extends PostTemplate implements Transla
 
         HttpResponse<String> response = post(params);
 
-        return parseResponseBody(response.body());
+        return parseResponseBody(response);
     }
 }
