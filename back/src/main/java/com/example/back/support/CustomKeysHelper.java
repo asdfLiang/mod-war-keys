@@ -7,9 +7,7 @@ import com.example.back.model.RefHotKey;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.regex.Pattern;
 
 /**
@@ -42,55 +40,13 @@ public class CustomKeysHelper {
                 new BufferedReader(new InputStreamReader(new FileInputStream(filePath)))) {
 
             // 进行快捷键读取
-            return doReadHotKeys(reader);
+            return HotKeyParser.parse(reader);
 
         } catch (FileNotFoundException e) {
             throw new RuntimeException("自定义快捷键配置未找到，请配置文件路径");
         } catch (IOException e) {
             throw new RuntimeException("本地文件读取失败");
         }
-    }
-
-    /**
-     * 执行快捷键读取
-     *
-     * @param reader
-     * @return
-     * @throws IOException
-     */
-    private static List<RefHotKey> doReadHotKeys(BufferedReader reader) throws IOException {
-        // 当前行号
-        Integer row = -1;
-        // 当前行数据，指令
-        String line, cmd = "", comments = "";
-        // 用来存放当前配置的所有快捷键
-        List<RefHotKey> refHotKeys = new ArrayList<>();
-
-        while (Objects.nonNull(line = reader.readLine())) {
-            line = line.trim();
-            row++;
-            // 获取指令的热键配置，根据热键
-            if (Pattern.matches(COMMENTS_START_REGEX, line)) {
-                comments = getComments(line);
-            } else if (line.startsWith(CMD_STARTS)) {
-                cmd = getCmd(line);
-            } else if (line.startsWith(HOTKEY_START)) {
-                refHotKeys.add(new RefHotKey(row, cmd, comments, getHotKey(line)).require());
-            }
-        }
-        return refHotKeys;
-    }
-
-    private static String getComments(String line) {
-        return line.replaceFirst("// ", "");
-    }
-
-    private static String getCmd(String line) {
-        return line.substring(1, line.length() - 1);
-    }
-
-    private static String getHotKey(String line) {
-        return line.replaceAll(HOTKEY_START, "").trim();
     }
 
     private String fullPath() {
