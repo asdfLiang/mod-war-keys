@@ -5,15 +5,10 @@
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="449.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17"
             fx:controller="com.example.front.controller.ModKeyController">
 
-    <!--    <TextField fx:id="configPathInput" alignment="TOP_LEFT" layoutX="65.0" layoutY="34.0" prefHeight="23.0"-->
-    <!--               prefWidth="416.0" text="选择配置路径"/>    -->
-    <TextField fx:id="configPathInput" alignment="TOP_LEFT" layoutX="65.0" layoutY="34.0" prefHeight="23.0"
-               prefWidth="416.0" text="D:\DocumentsWarcraft III\CustomKeyBindings\CustomKeys.txt"/>
+    <Button alignment="TOP_LEFT" layoutX="449.0" layoutY="35.0" onAction="#selectFile" text="选择配置文件"/>
 
-    <Button fx:id="readConfigBtn" alignment="TOP_LEFT" layoutX="497.0" layoutY="34.0" onAction="#onReadConfigBtnClick"
-            text="读取"/>
-
-    <Label fx:id="configPathValue" layoutX="73.0" layoutY="69.0" prefHeight="15.0" prefWidth="381.0"/>
+    <TextField fx:id="configPathInput" alignment="TOP_LEFT" disable="true" layoutX="63.0" layoutY="35.0"
+               prefHeight="23.0" prefWidth="377.0" promptText="配置文件路径"/>
 
     <TableView fx:id="tableView" layoutX="63.0" layoutY="69.0" prefHeight="307.0" prefWidth="474.0">
         <columns>
@@ -23,10 +18,8 @@
         </columns>
     </TableView>
 
-    <Button fx:id="submitBtn" alignment="TOP_LEFT" layoutX="441.0" layoutY="398.0" onAction="#onReadConfigBtnClick"
-            text="确定"/>
+    <Button alignment="TOP_LEFT" layoutX="441.0" layoutY="398.0" text="确定"/>
 
-    <Button fx:id="cancelBtn" alignment="TOP_LEFT" layoutX="497.0" layoutY="398.0" onAction="#onReadConfigBtnClick"
-            text="取消"/>
+    <Button alignment="TOP_LEFT" layoutX="497.0" layoutY="398.0" onAction="#quit" text="退出"/>
 
 </AnchorPane>

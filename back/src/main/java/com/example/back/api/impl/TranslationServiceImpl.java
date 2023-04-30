@@ -20,6 +20,9 @@ import java.util.*;
  */
 @Service
 public class TranslationServiceImpl implements TranslationService {
+    @Value("{translation.engine}")
+    private String translationEngine;
+
     @Value("${translation.file.dir}")
     private String dir;
 
@@ -50,7 +53,7 @@ public class TranslationServiceImpl implements TranslationService {
 
     private String translate(String key) {
         return translatorFactory
-                .get(TranslatorEnum.Microsoft)
+                .get(TranslatorEnum.from(translationEngine))
                 .translate(key, LanguageEnum.EN.name(), LanguageEnum.ZH.name());
     }
 }
