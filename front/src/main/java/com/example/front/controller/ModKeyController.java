@@ -38,10 +38,10 @@ public class ModKeyController implements Initializable {
     private final Stage stage = AbstractJavaFxApplicationSupport.getStage();
     @FXML private TextField configPathInput;
     @FXML private TableView<CmdHotKeyVO> tableView = new TableView<>();
-    @FXML private TableColumn<CmdHotKeyVO, String> cmdType = new TableColumn<>();
-    @FXML private TableColumn<CmdHotKeyVO, String> cmd = new TableColumn<>();
-    @FXML private TableColumn<CmdHotKeyVO, String> cmdName = new TableColumn<>();
-    @FXML private TableColumn<CmdHotKeyVO, String> hotKey = new TableColumn<>();
+    @FXML private TableColumn<CmdHotKeyVO, String> cmdTypeColumn = new TableColumn<>();
+    @FXML private TableColumn<CmdHotKeyVO, String> cmdColumn = new TableColumn<>();
+    @FXML private TableColumn<CmdHotKeyVO, String> cmdNameColumn = new TableColumn<>();
+    @FXML private TableColumn<CmdHotKeyVO, String> hotKeyColumn = new TableColumn<>();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -81,10 +81,10 @@ public class ModKeyController implements Initializable {
 
     /** 绑定每列的数据 */
     protected void bindColumnData() {
-        cmdType.setCellValueFactory(new PropertyValueFactory<>("cmdTypeDesc"));
-        cmd.setCellValueFactory(new PropertyValueFactory<>("cmd"));
-        cmdName.setCellValueFactory(new PropertyValueFactory<>("cmdTranslation"));
-        hotKey.setCellValueFactory(new PropertyValueFactory<>("hotKey"));
+        cmdTypeColumn.setCellValueFactory(new PropertyValueFactory<>("cmdTypeDesc"));
+        cmdColumn.setCellValueFactory(new PropertyValueFactory<>("cmd"));
+        cmdNameColumn.setCellValueFactory(new PropertyValueFactory<>("cmdTranslation"));
+        hotKeyColumn.setCellValueFactory(new PropertyValueFactory<>("hotKey"));
     }
 
     private CmdHotKeyVO buildVO(CmdHotKeyDTO dto) {
