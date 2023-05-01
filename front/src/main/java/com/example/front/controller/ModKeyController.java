@@ -1,6 +1,6 @@
 package com.example.front.controller;
 
-import com.example.back.model.CmdHotKeyDTO;
+import com.example.back.manager.dto.CmdHotKeyDTO;
 import com.example.back.service.HotKeyService;
 import com.example.commons.utils.StringUtil;
 import com.example.front.vo.CmdHotKeyVO;

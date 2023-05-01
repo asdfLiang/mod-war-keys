@@ -1,6 +1,6 @@
 package com.example.back.manager;
 
-import com.example.back.model.CmdHotKeyDTO;
+import com.example.back.manager.dto.CmdHotKeyDTO;
 import com.example.commons.utils.FileUtil;
 import com.example.commons.utils.PropertiesUtil;
 import com.example.transaction.TranslatorFactory;

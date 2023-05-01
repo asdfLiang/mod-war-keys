@@ -1,6 +1,6 @@
 package com.example.back.service;
 
-import com.example.back.model.CmdHotKeyDTO;
+import com.example.back.manager.dto.CmdHotKeyDTO;
 
 import java.util.List;
 

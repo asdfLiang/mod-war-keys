@@ -3,7 +3,7 @@ package com.example.back.support;
 import static com.example.back.data.constants.MarkConstant.*;
 
 import com.example.back.data.enums.CmdTypeEnum;
-import com.example.back.model.RefHotKey;
+import com.example.back.support.entity.RefHotKey;
 
 import java.io.BufferedReader;
 import java.io.IOException;

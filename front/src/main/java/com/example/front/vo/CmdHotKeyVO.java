@@ -15,10 +15,10 @@ public class CmdHotKeyVO {
     /** 指令 */
     private String cmd;
 
-    /** 指令类型说明 */
+    /** 指令类型 */
     private String cmdTypeDesc;
 
-    /** 指令说明翻译 */
+    /** 指令说明 */
     private String cmdTranslation;
 
     /** 热键 */

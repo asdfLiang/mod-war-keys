@@ -1,4 +1,4 @@
-package com.example.back.model;
+package com.example.back.manager.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

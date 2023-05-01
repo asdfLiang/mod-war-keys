@@ -4,8 +4,8 @@ import static com.example.commons.utils.ThreadUtil.newDaemonThread;
 
 import com.example.back.data.enums.CmdTypeEnum;
 import com.example.back.manager.TranslationManager;
-import com.example.back.model.CmdHotKeyDTO;
-import com.example.back.model.RefHotKey;
+import com.example.back.manager.dto.CmdHotKeyDTO;
+import com.example.back.support.entity.RefHotKey;
 import com.example.back.service.HotKeyService;
 import com.example.back.support.CustomKeysHelper;
 import com.example.commons.utils.FileUtil;

@@ -1,4 +1,4 @@
-package com.example.back.model;
+package com.example.back.support.entity;
 
 import com.example.commons.utils.StringUtil;
 
@@ -36,8 +36,6 @@ public class RefHotKey {
 
     /**
      * 检查并返回当前对象
-     *
-     * @return
      */
     public RefHotKey require() {
         if (Objects.nonNull(row) && StringUtil.isNotBlank(cmd)) {
