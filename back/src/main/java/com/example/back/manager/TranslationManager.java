@@ -35,7 +35,7 @@ public class TranslationManager {
     }
 
     /** 完善翻译，检查是否有未翻译的文本，如果有，进行翻译 */
-    public void perfectTranslation(List<CmdHotKeyDTO> hotKeys) {
+    public void perfect(List<CmdHotKeyDTO> hotKeys) {
         Path path = FileUtil.getPath(dir, fileName);
         // 读取翻译文本
         Properties local = PropertiesUtil.load(path);

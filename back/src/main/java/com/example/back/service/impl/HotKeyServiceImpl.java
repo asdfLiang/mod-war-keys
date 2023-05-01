@@ -53,7 +53,7 @@ public class HotKeyServiceImpl implements HotKeyService {
                 refHotKeys.stream().map(this::buildDTO).collect(Collectors.toList());
 
         // 后台翻译(如果翻译的文本不完整的话)
-        newDaemonThread(() -> translationManager.perfectTranslation(hotKeys)).start();
+        newDaemonThread(() -> translationManager.perfect(hotKeys)).start();
 
         return hotKeys;
     }
