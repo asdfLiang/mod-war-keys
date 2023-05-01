@@ -1,7 +1,7 @@
-package com.example.back.api.impl;
+package com.example.back.service.impl;
 
-import com.example.back.api.TranslationService;
-import com.example.back.model.CmdHotKeyVO;
+import com.example.back.service.TranslationService;
+import com.example.back.model.CmdHotKeyDTO;
 import com.example.commons.utils.FileUtil;
 import com.example.commons.utils.PropertiesUtil;
 import com.example.transaction.TranslatorFactory;
@@ -36,7 +36,7 @@ public class TranslationServiceImpl implements TranslationService {
     }
 
     @Override
-    public void perfectTranslation(List<CmdHotKeyVO> hotKeys) {
+    public void perfectTranslation(List<CmdHotKeyDTO> hotKeys) {
         Path path = FileUtil.getPath(dir, fileName);
         // 读取翻译文本
         Properties local = PropertiesUtil.load(path);

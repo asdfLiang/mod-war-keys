@@ -1,28 +1,25 @@
-package com.example.back.model;
+package com.example.front.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * 快捷键展示对象
- *
- * @since 2023/3/24 22:22
+ * @since 2023/5/1 9:25
  * @author by liangzj
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class CmdHotKeyVO {
-
     /** 指令 */
     private String cmd;
 
-    /** 指令说明 */
-    private String comments;
+    /** 指令类型说明 */
+    private String cmdTypeDesc;
 
     /** 指令说明翻译 */
-    private String translation;
+    private String cmdTranslation;
 
     /** 热键 */
     private String hotKey;

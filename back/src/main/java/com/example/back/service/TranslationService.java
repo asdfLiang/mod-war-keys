@@ -1,6 +1,6 @@
-package com.example.back.api;
+package com.example.back.service;
 
-import com.example.back.model.CmdHotKeyVO;
+import com.example.back.model.CmdHotKeyDTO;
 
 import java.util.List;
 
@@ -11,5 +11,5 @@ import java.util.List;
 public interface TranslationService {
 
     /** 完善翻译，检查是否有未翻译的文本，如果有，进行翻译 */
-    void perfectTranslation(List<CmdHotKeyVO> hotKeys);
+    void perfectTranslation(List<CmdHotKeyDTO> hotKeys);
 }

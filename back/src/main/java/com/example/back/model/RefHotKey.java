@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 import java.util.Objects;
 
 /**
- * 原始热键
+ * 原始热键信息
  *
  * @since 2023/3/24 23:28
  * @author by liangzj
@@ -24,6 +24,9 @@ public class RefHotKey {
 
     /** 指令 */
     private String cmd;
+
+    /** 指令类型 */
+    private Integer cmdType;
 
     /** 指令说明 */
     private String comments;

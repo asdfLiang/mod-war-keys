@@ -1,11 +1,9 @@
 package com.example.front.controller;
 
-import static com.example.commons.utils.ThreadUtil.newDaemonThread;
-
-import com.example.back.api.HotKeyService;
-import com.example.back.api.TranslationService;
-import com.example.back.model.CmdHotKeyVO;
+import com.example.back.model.CmdHotKeyDTO;
+import com.example.back.service.HotKeyService;
 import com.example.commons.utils.StringUtil;
+import com.example.front.vo.CmdHotKeyVO;
 
 import de.felixroske.jfxsupport.AbstractJavaFxApplicationSupport;
 import de.felixroske.jfxsupport.FXMLController;
@@ -21,6 +19,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 
 import java.io.File;
 import java.net.URL;
@@ -35,11 +34,11 @@ import java.util.ResourceBundle;
 @FXMLController
 public class ModKeyController implements Initializable {
     @Autowired private HotKeyService hotKeyService;
-    @Autowired private TranslationService translationService;
 
     private final Stage stage = AbstractJavaFxApplicationSupport.getStage();
     @FXML private TextField configPathInput;
     @FXML private TableView<CmdHotKeyVO> tableView = new TableView<>();
+    @FXML private TableColumn<CmdHotKeyVO, String> cmdType = new TableColumn<>();
     @FXML private TableColumn<CmdHotKeyVO, String> cmd = new TableColumn<>();
     @FXML private TableColumn<CmdHotKeyVO, String> cmdName = new TableColumn<>();
     @FXML private TableColumn<CmdHotKeyVO, String> hotKey = new TableColumn<>();
@@ -69,17 +68,27 @@ public class ModKeyController implements Initializable {
 
     protected void initColumnData() {
         String filePath = configPathInput.getText();
-        List<CmdHotKeyVO> hotKeys = hotKeyService.load(filePath);
+        if (StringUtil.isBlank(filePath)) return;
 
-        // 初始化翻译文本
-        newDaemonThread(() -> translationService.perfectTranslation(hotKeys)).start();
-        tableView.setItems(FXCollections.observableList(hotKeys));
+        // 读取指令
+        List<CmdHotKeyDTO> hotKeys = hotKeyService.load(filePath);
+        if (CollectionUtils.isEmpty(hotKeys)) return;
+        List<CmdHotKeyVO> hotKeyVOS = hotKeys.stream().map(this::buildVO).toList();
+
+        // 展示指令
+        tableView.setItems(FXCollections.observableList(hotKeyVOS));
     }
 
     /** 绑定每列的数据 */
     private void bindColumnData() {
+        cmdType.setCellValueFactory(new PropertyValueFactory<>("cmdTypeDesc"));
         cmd.setCellValueFactory(new PropertyValueFactory<>("cmd"));
-        cmdName.setCellValueFactory(new PropertyValueFactory<>("translation"));
+        cmdName.setCellValueFactory(new PropertyValueFactory<>("cmdTranslation"));
         hotKey.setCellValueFactory(new PropertyValueFactory<>("hotKey"));
+    }
+
+    private CmdHotKeyVO buildVO(CmdHotKeyDTO dto) {
+        return new CmdHotKeyVO(
+                dto.getCmd(), dto.getCmdTypeDesc(), dto.getTranslation(), dto.getHotKey());
     }
 }

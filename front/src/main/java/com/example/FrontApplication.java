@@ -28,7 +28,7 @@ public class FrontApplication extends AbstractJavaFxApplicationSupport {
     @Override
     public void start(Stage stage) throws Exception {
         super.start(stage);
-        stage.setTitle("war3改键器");
+        stage.setTitle("war3hotKey");
         stage.resizableProperty().setValue(Boolean.FALSE);
     }
 }

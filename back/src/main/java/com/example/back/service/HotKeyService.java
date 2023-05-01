@@ -1,6 +1,6 @@
-package com.example.back.api;
+package com.example.back.service;
 
-import com.example.back.model.CmdHotKeyVO;
+import com.example.back.model.CmdHotKeyDTO;
 
 import java.util.List;
 
@@ -16,7 +16,5 @@ public interface HotKeyService {
      * @param configFilePath 自定义热键配置文件路径
      * @return 读取到的热键信息
      */
-    List<CmdHotKeyVO> load(String configFilePath);
-
-    // TODO 按照热键类型读取热键
+    List<CmdHotKeyDTO> load(String configFilePath);
 }

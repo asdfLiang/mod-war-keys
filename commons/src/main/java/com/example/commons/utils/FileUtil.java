@@ -1,12 +1,13 @@
 package com.example.commons.utils;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @since 2023/3/18 16:16
@@ -29,17 +30,16 @@ public class FileUtil {
     }
 
     public static List<String> readFile(String dir, String fileName) {
+        if (StringUtil.isBlank(dir) || StringUtil.isNotBlank(fileName)) {
+            return Collections.emptyList();
+        }
 
-        Path path = Paths.get(dir, fileName);
-
-        try {
-            if (!path.toFile().exists()) {
-                throw new FileNotFoundException(String.format("file %s not found", fileName));
-            }
-
-            return Files.lines(path).collect(Collectors.toList());
+        try (Stream<String> lines = Files.lines(Paths.get(dir, fileName))) {
+            return lines.collect(Collectors.toList());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
+
+    public static void overwrite() {}
 }

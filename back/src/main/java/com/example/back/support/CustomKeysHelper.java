@@ -1,6 +1,6 @@
 package com.example.back.support;
 
-import static com.example.back.common.constants.MarkConstant.*;
+import static com.example.back.data.constants.MarkConstant.*;
 
 import com.example.back.model.RefHotKey;
 
@@ -23,7 +23,7 @@ public class CustomKeysHelper {
 
     private String file;
 
-    private String filePath;
+    private final String filePath;
 
     public CustomKeysHelper(String filePath) {
         this.filePath = filePath;
