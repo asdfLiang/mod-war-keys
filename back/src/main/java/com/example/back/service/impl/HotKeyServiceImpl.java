@@ -3,10 +3,10 @@ package com.example.back.service.impl;
 import static com.example.commons.utils.ThreadUtil.newDaemonThread;
 
 import com.example.back.data.enums.CmdTypeEnum;
+import com.example.back.manager.TranslationManager;
 import com.example.back.model.CmdHotKeyDTO;
 import com.example.back.model.RefHotKey;
 import com.example.back.service.HotKeyService;
-import com.example.back.service.TranslationService;
 import com.example.back.support.CustomKeysHelper;
 import com.example.commons.utils.FileUtil;
 import com.example.commons.utils.PropertiesUtil;
@@ -34,7 +34,7 @@ public class HotKeyServiceImpl implements HotKeyService {
     @Value("${translation.file.name}")
     private String fileName;
 
-    @Autowired private TranslationService translationService;
+    @Autowired private TranslationManager translationManager;
 
     @Override
     public List<CmdHotKeyDTO> load(String configFilePath) {
@@ -53,7 +53,7 @@ public class HotKeyServiceImpl implements HotKeyService {
                 refHotKeys.stream().map(this::buildDTO).collect(Collectors.toList());
 
         // 后台翻译(如果翻译的文本不完整的话)
-        newDaemonThread(() -> translationService.perfectTranslation(hotKeys)).start();
+        newDaemonThread(() -> translationManager.perfectTranslation(hotKeys)).start();
 
         return hotKeys;
     }

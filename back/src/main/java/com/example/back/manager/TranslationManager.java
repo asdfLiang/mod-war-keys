@@ -1,6 +1,5 @@
-package com.example.back.service.impl;
+package com.example.back.manager;
 
-import com.example.back.service.TranslationService;
 import com.example.back.model.CmdHotKeyDTO;
 import com.example.commons.utils.FileUtil;
 import com.example.commons.utils.PropertiesUtil;
@@ -9,7 +8,7 @@ import com.example.transaction.enums.LanguageEnum;
 import com.example.transaction.enums.TranslatorEnum;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.nio.file.Path;
 import java.util.*;
@@ -18,8 +17,8 @@ import java.util.*;
  * @since 2023/3/25 12:41
  * @author by liangzj
  */
-@Service
-public class TranslationServiceImpl implements TranslationService {
+@Component
+public class TranslationManager {
     @Value("{translation.engine}")
     private String translationEngine;
 
@@ -31,11 +30,11 @@ public class TranslationServiceImpl implements TranslationService {
 
     private final TranslatorFactory translatorFactory;
 
-    public TranslationServiceImpl(TranslatorFactory translatorFactory) {
+    public TranslationManager(TranslatorFactory translatorFactory) {
         this.translatorFactory = translatorFactory;
     }
 
-    @Override
+    /** 完善翻译，检查是否有未翻译的文本，如果有，进行翻译 */
     public void perfectTranslation(List<CmdHotKeyDTO> hotKeys) {
         Path path = FileUtil.getPath(dir, fileName);
         // 读取翻译文本

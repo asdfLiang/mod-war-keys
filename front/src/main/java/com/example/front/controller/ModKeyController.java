@@ -80,7 +80,7 @@ public class ModKeyController implements Initializable {
     }
 
     /** 绑定每列的数据 */
-    private void bindColumnData() {
+    protected void bindColumnData() {
         cmdType.setCellValueFactory(new PropertyValueFactory<>("cmdTypeDesc"));
         cmd.setCellValueFactory(new PropertyValueFactory<>("cmd"));
         cmdName.setCellValueFactory(new PropertyValueFactory<>("cmdTranslation"));
