@@ -7,8 +7,10 @@ import com.example.transaction.TranslatorFactory;
 import com.example.transaction.enums.LanguageEnum;
 import com.example.transaction.enums.TranslatorEnum;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import java.nio.file.Path;
 import java.util.*;
@@ -20,19 +22,19 @@ import java.util.*;
 @Component
 public class TranslationManager {
     @Value("{translation.engine}")
-    private String translationEngine;
+    private String engine;
 
     @Value("${translation.pathname}")
     private String pathname;
 
-    private final TranslatorFactory translatorFactory;
-
-    public TranslationManager(TranslatorFactory translatorFactory) {
-        this.translatorFactory = translatorFactory;
-    }
+    @Autowired private TranslatorFactory translatorFactory;
 
     /** 完善翻译，检查是否有未翻译的文本，如果有，进行翻译 */
     public void perfect(List<CmdHotKeyDTO> hotKeys) {
+        if (CollectionUtils.isEmpty(hotKeys)) {
+            return;
+        }
+
         Path path = FileUtil.getPath(pathname);
         // 读取翻译文本
         Properties local = PropertiesUtil.load(path);
@@ -42,14 +44,14 @@ public class TranslationManager {
                 vo -> {
                     if (!local.containsKey(vo.getCmd())) {
                         local.put(vo.getCmd(), translate(vo.getComments()));
-                        PropertiesUtil.store(path, local, "translation...");
+                        PropertiesUtil.store(path, local, "translation by " + engine);
                     }
                 });
     }
 
     private String translate(String key) {
         return translatorFactory
-                .get(TranslatorEnum.from(translationEngine))
+                .get(TranslatorEnum.from(engine))
                 .translate(key, LanguageEnum.EN.name(), LanguageEnum.ZH.name());
     }
 }

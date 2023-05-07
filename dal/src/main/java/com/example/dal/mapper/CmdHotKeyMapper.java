@@ -17,10 +17,10 @@ public interface CmdHotKeyMapper {
 
     @Insert({
         "<script>",
-        " INSERT INTO cmd_hot_key(row, cmd, hot_key) ",
+        " INSERT INTO cmd_hot_key(row, cmd, cmd_type, hot_key) ",
         " values ",
         " <foreach collection='list' item='item' separator=','>",
-        "   (#{item.row}, #{item.cmd}, #{item.hotKey})",
+        "   (#{item.row}, #{item.cmd}, #{item.cmdType}, #{item.hotKey})",
         " </foreach>",
         "</script>"
     })
@@ -28,9 +28,6 @@ public interface CmdHotKeyMapper {
 
     @Delete({"<script> DELETE FROM cmd_hot_key </script>"})
     void deleteAll();
-
-    @Update({"<script> UPDATE sqlite_sequence SET seq = 0 WHERE name ='cmd_hot_key' </script>"})
-    void resetSequence();
 
     @Select({"<script> SELECT * FROM cmd_hot_key WHERE cmd = #{cmd} </script>"})
     CmdHotKeyDO selectByCmd(@Param("cmd") String cmd);

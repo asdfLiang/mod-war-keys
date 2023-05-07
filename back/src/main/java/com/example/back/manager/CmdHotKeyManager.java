@@ -5,16 +5,20 @@ import static com.example.back.support.constants.MarkConstant.HOTKEY_START;
 import com.example.back.support.HotKeyParser;
 import com.example.back.support.entity.RefHotKey;
 import com.example.commons.utils.FileUtil;
+import com.example.commons.utils.StringUtil;
 import com.example.dal.entity.CmdHotKeyDO;
 import com.example.dal.mapper.CmdHotKeyMapper;
+import com.example.dal.mapper.SequenceMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import java.io.*;
+import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * @since 2023/5/6 23:24
@@ -23,6 +27,7 @@ import java.util.stream.Collectors;
 @Component
 public class CmdHotKeyManager {
     @Autowired private CmdHotKeyMapper cmdHotKeyMapper;
+    @Autowired private SequenceMapper sequenceMapper;
 
     // ******************************** 数据库操作 ******************************** //
 
@@ -37,10 +42,11 @@ public class CmdHotKeyManager {
             return 0;
         }
 
+        // 清空当前记录
         clear();
 
-        List<CmdHotKeyDO> list =
-                refHotKeys.stream().map(this::buildDO).collect(Collectors.toList());
+        // 重新插入
+        List<CmdHotKeyDO> list = refHotKeys.stream().map(this::buildDO).toList();
         return cmdHotKeyMapper.insertBatch(list);
     }
 
@@ -50,14 +56,19 @@ public class CmdHotKeyManager {
      * @param cmd 指令
      * @return 快捷键记录
      */
-    public CmdHotKeyDO selectByCmd(String cmd) {
-        return cmdHotKeyMapper.selectByCmd(cmd);
+    public CmdHotKeyDO requireByCmd(String cmd) {
+        if (StringUtil.isBlank(cmd)) {
+            return null;
+        }
+
+        return Optional.ofNullable(cmdHotKeyMapper.selectByCmd(cmd))
+                .orElseThrow(() -> new RuntimeException("要修改的热键信息不存在"));
     }
 
     /** 清理快捷键记录 */
     public void clear() {
         cmdHotKeyMapper.deleteAll();
-        cmdHotKeyMapper.resetSequence();
+        sequenceMapper.resetSequence(SequenceMapper.CMD_HOT_KEY);
     }
 
     // ******************************** 自定义配置文件操作 ******************************** //
@@ -69,6 +80,10 @@ public class CmdHotKeyManager {
      * @return 快捷键列表
      */
     public List<RefHotKey> readHotKeys(String pathname) {
+        if (StringUtil.isBlank(pathname)) {
+            return Collections.emptyList();
+        }
+
         try (BufferedReader reader =
                 new BufferedReader(new InputStreamReader(new FileInputStream(pathname)))) {
 
@@ -76,7 +91,7 @@ public class CmdHotKeyManager {
             return HotKeyParser.parse(reader);
 
         } catch (FileNotFoundException e) {
-            throw new RuntimeException("自定义快捷键配置未找到，请配置文件路径");
+            throw new RuntimeException("自定义快捷键配置未找到，请检查配置文件路径");
         } catch (IOException e) {
             throw new RuntimeException("本地文件读取失败");
         }
@@ -90,18 +105,26 @@ public class CmdHotKeyManager {
      * @param newHotKey 新快捷键
      */
     public void updateHotKey(String pathname, CmdHotKeyDO target, String newHotKey) {
+        if (Objects.isNull(target)) {
+            return;
+        }
+
         // 修改文件行
         FileUtil.updateLine(
                 pathname,
                 target.getRow(),
                 HOTKEY_START + target.getHotKey(),
                 HOTKEY_START + newHotKey);
+
+        // 刷新数据库
+        refresh(readHotKeys(pathname));
     }
 
     private CmdHotKeyDO buildDO(RefHotKey refHotKey) {
         CmdHotKeyDO cmdHotKeyDO = new CmdHotKeyDO();
         cmdHotKeyDO.setRow(refHotKey.getRow());
         cmdHotKeyDO.setCmd(refHotKey.getCmd());
+        cmdHotKeyDO.setCmdType(refHotKey.getCmdType());
         cmdHotKeyDO.setHotKey(refHotKey.getHotKey());
 
         return cmdHotKeyDO;

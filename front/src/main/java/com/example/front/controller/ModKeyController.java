@@ -3,6 +3,7 @@ package com.example.front.controller;
 import com.example.back.manager.dto.CmdHotKeyDTO;
 import com.example.back.service.HotKeyService;
 import com.example.back.service.RecordService;
+import com.example.back.support.exceptions.HotKeyConflictException;
 import com.example.commons.utils.StringUtil;
 import com.example.front.vo.CmdHotKeyVO;
 
@@ -12,9 +13,7 @@ import de.felixroske.jfxsupport.FXMLController;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.FileChooser;
@@ -27,6 +26,7 @@ import java.io.File;
 import java.net.URL;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 /**
@@ -50,9 +50,10 @@ public class ModKeyController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         bindColumnData();
 
+        // 打开界面时读取最近加载的配置文件
         configPathInput.setText(recordService.latestPathname());
 
-        initColumnData();
+        refreshColumnData();
     }
 
     @FXML
@@ -65,7 +66,8 @@ public class ModKeyController implements Initializable {
         }
 
         configPathInput.setText(file.getAbsolutePath());
-        initColumnData();
+
+        refreshColumnData();
     }
 
     @FXML
@@ -73,7 +75,7 @@ public class ModKeyController implements Initializable {
         stage.close();
     }
 
-    protected void initColumnData() {
+    protected void refreshColumnData() {
         String filePath = configPathInput.getText();
         if (StringUtil.isBlank(filePath)) return;
 
@@ -96,8 +98,27 @@ public class ModKeyController implements Initializable {
         // 快捷键编辑
         hotKeyColumn.setCellValueFactory(new PropertyValueFactory<>("hotKey"));
         hotKeyColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-        hotKeyColumn.setOnEditCommit(
-                event -> hotKeyService.update(event.getRowValue().getCmd(), event.getNewValue()));
+        hotKeyColumn.setOnEditCommit(this::confirmUpdate);
+    }
+
+    /** 确认更新快捷键 */
+    private void confirmUpdate(TableColumn.CellEditEvent<CmdHotKeyVO, String> event) {
+        try {
+            hotKeyService.update(event.getRowValue().getCmd(), event.getNewValue(), false);
+        } catch (HotKeyConflictException e) {
+            // 检测到冲突，进行二次确认
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setContentText(e.getMessage() + ", 是否确认修改？");
+            Optional<ButtonType> buttonType = alert.showAndWait();
+            ButtonType confirm = buttonType.orElse(ButtonType.CANCEL);
+
+            if (ButtonType.OK == confirm || ButtonType.YES == confirm) {
+                hotKeyService.update(event.getRowValue().getCmd(), event.getNewValue(), true);
+            }
+        }
+
+        // 刷新列表
+        refreshColumnData();
     }
 
     private CmdHotKeyVO buildVO(CmdHotKeyDTO dto) {

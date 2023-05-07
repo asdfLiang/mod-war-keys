@@ -9,10 +9,11 @@ import com.example.back.manager.dto.CmdHotKeyDTO;
 import com.example.back.service.HotKeyService;
 import com.example.back.support.entity.RefHotKey;
 import com.example.back.support.enums.CmdTypeEnum;
+import com.example.back.support.exceptions.HotKeyConflictException;
 import com.example.commons.utils.FileUtil;
 import com.example.commons.utils.PropertiesUtil;
+import com.example.commons.utils.StringUtil;
 import com.example.dal.entity.CmdHotKeyDO;
-import com.example.dal.entity.LoadRecordDO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -68,18 +69,76 @@ public class HotKeyServiceImpl implements HotKeyService {
     }
 
     @Override
-    public void update(String cmd, String hotKey) {
-        CmdHotKeyDO cmdHotKeyDO = cmdHotKeyManager.selectByCmd(cmd);
+    public void update(String cmd, String hotKey, boolean force) {
+        if (!StringUtil.noneBlank(cmd, hotKey)) {
+            return;
+        }
 
-        LoadRecordDO recordDO = loadRecordManager.latest();
-        if (Objects.isNull(recordDO)) {
+        String pathname = loadRecordManager.latestPathname();
+        if (StringUtil.isBlank(pathname)) {
             throw new RuntimeException("未找到要修改的配置文件路径");
         }
 
+        CmdHotKeyDO target = cmdHotKeyManager.requireByCmd(cmd);
+
+        // 不是强制更新，检查热键冲突检查
+        if (!force) checkConflict(pathname, target);
+
         // 修改快捷键
-        cmdHotKeyManager.updateHotKey(recordDO.getPathname(), cmdHotKeyDO, hotKey);
+        cmdHotKeyManager.updateHotKey(pathname, target, hotKey);
 
         log.info("update cmd {} hotkey to {}", cmd, hotKey);
+    }
+
+    private void checkConflict(String pathname, CmdHotKeyDO target) throws HotKeyConflictException {
+        // 获取所有快捷键
+        List<RefHotKey> refHotKeys = cmdHotKeyManager.readHotKeys(pathname);
+        if (CollectionUtils.isEmpty(refHotKeys)) {
+            return;
+        }
+
+        // 可能冲突的快捷键
+        List<RefHotKey> mayConflicts =
+                refHotKeys.stream().filter(refHotKey -> mayConflict(target, refHotKey)).toList();
+
+        // 过滤冲突快捷键
+        List<RefHotKey> conflicts =
+                mayConflicts.stream()
+                        .filter(key -> Objects.equals(key.getHotKey(), target.getHotKey()))
+                        .toList();
+        if (CollectionUtils.isEmpty(conflicts)) {
+            return;
+        }
+
+        String conflictTip =
+                conflicts.stream()
+                        .map(conflict -> "[" + conflict.getCmd() + "]")
+                        .collect(Collectors.joining("、"));
+
+        throw new HotKeyConflictException("与指令" + conflictTip + "冲突");
+    }
+
+    /**
+     * 是否可能与当前快捷键冲突，只有公共快捷键和同类型的指令才可能冲突
+     *
+     * @param target 当前快捷键
+     * @param may 可能冲突的快捷键
+     * @return 是否可能冲突
+     */
+    private boolean mayConflict(CmdHotKeyDO target, RefHotKey may) {
+        // 和自己不会冲突
+        if (Objects.equals(target.getCmd(), may.getCmd())) {
+            return false;
+        }
+
+        // 公共快捷键和其他快捷键会冲突
+        if (CmdTypeEnum.Shared.getType().equals(target.getCmdType())
+                || CmdTypeEnum.Shared.getType().equals(may.getCmdType())) {
+            return true;
+        }
+
+        // 同类型快捷键会冲突
+        return Objects.equals(target.getCmdType(), may.getCmdType());
     }
 
     private void refreshLoadRecord(String configFilePath, List<RefHotKey> refHotKeys) {

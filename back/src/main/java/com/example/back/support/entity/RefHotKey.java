@@ -34,13 +34,11 @@ public class RefHotKey {
     /** 热键 */
     private String hotKey;
 
-    /**
-     * 检查并返回当前对象
-     */
+    /** 检查并返回当前对象 */
     public RefHotKey require() {
-        if (Objects.nonNull(row) && StringUtil.isNotBlank(cmd)) {
+        if (Objects.nonNull(row) && Objects.nonNull(cmdType) && StringUtil.isNotBlank(cmd)) {
             return this;
         }
-        throw new RuntimeException("配置文件格式错误！热键信息：" + this);
+        throw new IllegalArgumentException("配置文件格式错误！热键信息：" + this);
     }
 }

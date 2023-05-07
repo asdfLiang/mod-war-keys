@@ -23,6 +23,7 @@ public interface HotKeyService {
      *
      * @param cmd 指令
      * @param hotKey 热键
+     * @param force 强制更新，忽略热键冲突
      */
-    void update(String cmd, String hotKey);
+    void update(String cmd, String hotKey, boolean force);
 }

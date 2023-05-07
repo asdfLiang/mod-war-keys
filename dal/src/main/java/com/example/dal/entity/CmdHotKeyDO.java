@@ -19,6 +19,9 @@ public class CmdHotKeyDO {
     /** 指令 */
     private String cmd;
 
+    /** 指令类型 */
+    private Integer cmdType;
+
     /** 热键 */
     private String hotKey;
 }
