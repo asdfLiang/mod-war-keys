@@ -24,6 +24,9 @@ public enum CmdTypeEnum {
     Night_Units(7, "Night Elf Units & Abilities", "暗夜精灵单位&技能"),
     Night_Bldgs(8, "Night Elf Bldgs, Upgrades & Abilities", "暗夜精灵建筑升级&技能"),
     Night_Heroes(9, "Night Elf Heroes & Abilities", "暗夜精灵英雄&技能"),
+    Undead_Units(10, "Undead Units & Abilities", "不死族单位&技能"),
+    Undead_Bldgs(11, "Undead Bldgs, Upgrades & Abilities", "不死族建筑升级&技能"),
+    Undead_Heroes(12, "Undead Heroes & Abilities", "不死族英雄&技能"),
     ;
 
     private final Integer type;

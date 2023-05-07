@@ -22,9 +22,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Properties;
+import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -96,13 +95,14 @@ public class HotKeyServiceImpl implements HotKeyService {
         if (CollectionUtils.isEmpty(refHotKeys)) {
             return;
         }
+        List<CmdHotKeyDTO> cmdHotKeys = refHotKeys.stream().map(this::buildDTO).toList();
 
         // 可能冲突的快捷键
-        List<RefHotKey> mayConflicts =
-                refHotKeys.stream().filter(refHotKey -> mayConflict(target, refHotKey)).toList();
+        List<CmdHotKeyDTO> mayConflicts =
+                cmdHotKeys.stream().filter(hotKey -> mayConflict(target, hotKey)).toList();
 
         // 过滤冲突快捷键
-        List<RefHotKey> conflicts =
+        List<CmdHotKeyDTO> conflicts =
                 mayConflicts.stream()
                         .filter(key -> Objects.equals(key.getHotKey(), target.getHotKey()))
                         .toList();
@@ -110,12 +110,24 @@ public class HotKeyServiceImpl implements HotKeyService {
             return;
         }
 
-        String conflictTip =
-                conflicts.stream()
-                        .map(conflict -> "[" + conflict.getCmd() + "]")
-                        .collect(Collectors.joining("、"));
+        throw new HotKeyConflictException("与\n" + joinConflictCmd(conflicts) + "\n冲突");
+    }
 
-        throw new HotKeyConflictException("与指令" + conflictTip + "冲突");
+    private String joinConflictCmd(List<CmdHotKeyDTO> conflicts) {
+        Map<Integer, List<CmdHotKeyDTO>> conflictMap =
+                conflicts.stream().collect(Collectors.groupingBy(CmdHotKeyDTO::getCmdType));
+
+        // 同类类型指令提示信息拼接, 指令类型[指令1、指令2...指令n]
+        Function<? super Map.Entry<Integer, List<CmdHotKeyDTO>>, ? extends String> prettyCmd =
+                entry ->
+                        CmdTypeEnum.from(entry.getKey()).getDesc()
+                                + "["
+                                + entry.getValue().stream()
+                                        .map(CmdHotKeyDTO::getTranslation)
+                                        .collect(Collectors.joining("、"))
+                                + "]";
+
+        return conflictMap.entrySet().stream().map(prettyCmd).collect(Collectors.joining(",\n"));
     }
 
     /**
@@ -125,7 +137,7 @@ public class HotKeyServiceImpl implements HotKeyService {
      * @param may 可能冲突的快捷键
      * @return 是否可能冲突
      */
-    private boolean mayConflict(CmdHotKeyDO target, RefHotKey may) {
+    private boolean mayConflict(CmdHotKeyDO target, CmdHotKeyDTO may) {
         // 和自己不会冲突
         if (Objects.equals(target.getCmd(), may.getCmd())) {
             return false;
