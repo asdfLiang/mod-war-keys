@@ -1,9 +1,9 @@
 package com.example.back.support;
 
-import static com.example.back.data.constants.MarkConstant.*;
+import static com.example.back.support.constants.MarkConstant.*;
 
-import com.example.back.data.enums.CmdTypeEnum;
 import com.example.back.support.entity.RefHotKey;
+import com.example.back.support.enums.CmdTypeEnum;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -59,5 +59,13 @@ public class HotKeyParser {
 
     private static String getHotKey(String line) {
         return line.replaceAll(HOTKEY_START, "").trim();
+    }
+
+    public static void main(String[] args) {
+        System.out.println(Pattern.matches(COMMENTS_START_REGEX, "////////////"));
+        System.out.println(Pattern.matches(COMMENTS_START_REGEX, "//abc"));
+        System.out.println(Pattern.matches(COMMENTS_START_REGEX, "// abc"));
+        System.out.println(Pattern.matches(COMMENTS_START_REGEX, "// abc&"));
+        System.out.println(Pattern.matches(COMMENTS_START_REGEX, "//orc melee weapon upgrades"));
     }
 }

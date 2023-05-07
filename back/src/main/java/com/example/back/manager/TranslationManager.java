@@ -22,11 +22,8 @@ public class TranslationManager {
     @Value("{translation.engine}")
     private String translationEngine;
 
-    @Value("${translation.file.dir}")
-    private String dir;
-
-    @Value("${translation.file.name}")
-    private String fileName;
+    @Value("${translation.pathname}")
+    private String pathname;
 
     private final TranslatorFactory translatorFactory;
 
@@ -36,7 +33,7 @@ public class TranslationManager {
 
     /** 完善翻译，检查是否有未翻译的文本，如果有，进行翻译 */
     public void perfect(List<CmdHotKeyDTO> hotKeys) {
-        Path path = FileUtil.getPath(dir, fileName);
+        Path path = FileUtil.getPath(pathname);
         // 读取翻译文本
         Properties local = PropertiesUtil.load(path);
 

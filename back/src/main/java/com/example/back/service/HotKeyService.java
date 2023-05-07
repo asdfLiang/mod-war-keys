@@ -17,4 +17,12 @@ public interface HotKeyService {
      * @return 读取到的热键信息
      */
     List<CmdHotKeyDTO> load(String configFilePath);
+
+    /**
+     * 更新热键
+     *
+     * @param cmd 指令
+     * @param hotKey 热键
+     */
+    void update(String cmd, String hotKey);
 }

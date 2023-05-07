@@ -1,4 +1,4 @@
-package com.example.back.data.constants;
+package com.example.back.support.constants;
 /**
  * 配置内容固定标记，用来识别配置信息
  *

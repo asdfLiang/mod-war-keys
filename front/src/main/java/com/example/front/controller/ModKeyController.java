@@ -2,6 +2,7 @@ package com.example.front.controller;
 
 import com.example.back.manager.dto.CmdHotKeyDTO;
 import com.example.back.service.HotKeyService;
+import com.example.back.service.RecordService;
 import com.example.commons.utils.StringUtil;
 import com.example.front.vo.CmdHotKeyVO;
 
@@ -15,6 +16,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -34,6 +36,7 @@ import java.util.ResourceBundle;
 @FXMLController
 public class ModKeyController implements Initializable {
     @Autowired private HotKeyService hotKeyService;
+    @Autowired private RecordService recordService;
 
     private final Stage stage = AbstractJavaFxApplicationSupport.getStage();
     @FXML private TextField configPathInput;
@@ -46,6 +49,10 @@ public class ModKeyController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         bindColumnData();
+
+        configPathInput.setText(recordService.latestPathname());
+
+        initColumnData();
     }
 
     @FXML
@@ -81,10 +88,16 @@ public class ModKeyController implements Initializable {
 
     /** 绑定每列的数据 */
     protected void bindColumnData() {
+        tableView.setEditable(true);
         cmdTypeColumn.setCellValueFactory(new PropertyValueFactory<>("cmdTypeDesc"));
         cmdColumn.setCellValueFactory(new PropertyValueFactory<>("cmd"));
         cmdNameColumn.setCellValueFactory(new PropertyValueFactory<>("cmdTranslation"));
+
+        // 快捷键编辑
         hotKeyColumn.setCellValueFactory(new PropertyValueFactory<>("hotKey"));
+        hotKeyColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        hotKeyColumn.setOnEditCommit(
+                event -> hotKeyService.update(event.getRowValue().getCmd(), event.getNewValue()));
     }
 
     private CmdHotKeyVO buildVO(CmdHotKeyDTO dto) {

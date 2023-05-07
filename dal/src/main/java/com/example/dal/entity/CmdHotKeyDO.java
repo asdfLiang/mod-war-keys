@@ -13,21 +13,12 @@ public class CmdHotKeyDO {
 
     private Long id;
 
-    /** 配置唯一标识 */
-    private String keyId;
-
     /** 行号 */
     private Integer row;
 
     /** 指令 */
     private String cmd;
 
-    /** 指令名称 */
-    private String cmdName;
-
     /** 热键 */
     private String hotKey;
-
-    /** 指令类型 */
-    private Integer cmdType;
 }

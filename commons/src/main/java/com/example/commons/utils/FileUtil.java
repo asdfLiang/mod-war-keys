@@ -1,13 +1,12 @@
 package com.example.commons.utils;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.Objects;
 
 /**
  * @since 2023/3/18 16:16
@@ -15,31 +14,37 @@ import java.util.stream.Stream;
  */
 public class FileUtil {
 
-    public static Path getPath(String dir, String fileName) {
-        return Paths.get(dir, fileName);
+    public static Path getPath(String pathname) {
+        File file = new File(pathname);
+
+        return Paths.get(file.getParent(), file.getName());
     }
 
-    public static boolean isFile(String path) {
-        // TODO
-        return true;
+    public static boolean isText(String pathname) {
+        File file = new File(pathname);
+        return file.isFile() && file.getName().endsWith(".txt");
     }
 
-    public static boolean isText(String path) {
-        // TODO
-        return true;
-    }
+    public static void updateLine(
+            String pathname, Integer lineNumber, String expect, String value) {
+        Path path = getPath(pathname);
+        try {
+            List<String> lines = Files.readAllLines(path);
+            // 检查行数
+            if (lineNumber < 0 || lineNumber > lines.size()) {
+                throw new IllegalArgumentException("要修改的行数不存在");
+            }
 
-    public static List<String> readFile(String dir, String fileName) {
-        if (StringUtil.isBlank(dir) || StringUtil.isNotBlank(fileName)) {
-            return Collections.emptyList();
-        }
+            // 检查当前内容是否与导入时一致
+            if (!Objects.equals(expect, lines.get(lineNumber))) {
+                throw new IllegalArgumentException("文件已被修改，重新加载");
+            }
 
-        try (Stream<String> lines = Files.lines(Paths.get(dir, fileName))) {
-            return lines.collect(Collectors.toList());
+            // 覆写指定行内容
+            lines.set(lineNumber, value);
+            Files.write(path, lines);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
-
-    public static void overwrite() {}
 }
