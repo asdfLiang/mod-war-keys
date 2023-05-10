@@ -1,5 +1,7 @@
 package com.example.back.support.enums;
 
+import static com.example.back.support.enums.RaceEnum.*;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -14,26 +16,32 @@ import java.util.Arrays;
 @Getter
 @AllArgsConstructor
 public enum CmdTypeEnum {
-    Shared(0, "Shared Commands (attack, etc.)", "通用指令"),
-    Human_Units(1, "Human Units & Abilities", "人类单位&技能"),
-    Human_Bldgs(2, "Human Bldgs, Upgrades & Abilities", "人类建筑升级&技能"),
-    Human_Heroes(3, "Human Heroes & Abilities", "人类英雄&技能"),
-    Orc_Units(4, "Orc Units & Abilities", "兽人单位&技能"),
-    Orc_Bldgs(5, "Orc Bldgs, Upgrades & Abilities", "兽人建筑升级&技能"),
-    Orc_Heroes(6, "Orc Heroes & Abilities", "兽人英雄&技能"),
-    Night_Units(7, "Night Elf Units & Abilities", "暗夜精灵单位&技能"),
-    Night_Bldgs(8, "Night Elf Bldgs, Upgrades & Abilities", "暗夜精灵建筑升级&技能"),
-    Night_Heroes(9, "Night Elf Heroes & Abilities", "暗夜精灵英雄&技能"),
-    Undead_Units(10, "Undead Units & Abilities", "不死族单位&技能"),
-    Undead_Bldgs(11, "Undead Bldgs, Upgrades & Abilities", "不死族建筑升级&技能"),
-    Undead_Heroes(12, "Undead Heroes & Abilities", "不死族英雄&技能"),
+    Shared(0, All, SubjectEnum.Shared, "Shared Commands (attack, etc.)"),
+    Human_Units(1, Human, SubjectEnum.Units, "Human Units & Abilities"),
+    Human_Bldgs(2, Human, SubjectEnum.Bldgs, "Human Bldgs, Upgrades & Abilities"),
+    Human_Heroes(3, Human, SubjectEnum.Heroes, "Human Heroes & Abilities"),
+    Orc_Units(4, Orc, SubjectEnum.Units, "Orc Units & Abilities"),
+    Orc_Bldgs(5, Orc, SubjectEnum.Bldgs, "Orc Bldgs, Upgrades & Abilities"),
+    Orc_Heroes(6, Orc, SubjectEnum.Heroes, "Orc Heroes & Abilities"),
+    Night_Units(7, Night_elf, SubjectEnum.Units, "Night Elf Units & Abilities"),
+    Night_Bldgs(8, Night_elf, SubjectEnum.Bldgs, "Night Elf Bldgs, Upgrades & Abilities"),
+    Night_Heroes(9, Night_elf, SubjectEnum.Heroes, "Night Elf Heroes & Abilities"),
+    Undead_Units(10, Undead, SubjectEnum.Units, "Undead Units & Abilities"),
+    Undead_Bldgs(11, Undead, SubjectEnum.Bldgs, "Undead Bldgs, Upgrades & Abilities"),
+    Undead_Heroes(12, Undead, SubjectEnum.Heroes, "Undead Heroes & Abilities"),
     ;
 
+    /** 指令类型 */
     private final Integer type;
 
-    private final String title;
+    /** 指令所属种族 */
+    private final RaceEnum race;
 
-    private final String desc;
+    /** 指令操作主体 */
+    private final SubjectEnum subject;
+
+    /** 指令在配置文件中的注释标识 */
+    private final String title;
 
     public static CmdTypeEnum fromTitle(String title) {
         return Arrays.stream(CmdTypeEnum.values())

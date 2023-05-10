@@ -12,9 +12,9 @@
 
     <TableView fx:id="tableView" layoutX="63.0" layoutY="69.0" prefHeight="307.0" prefWidth="474.0">
         <columns>
-            <TableColumn fx:id="cmdTypeColumn" prefWidth="125.0" sortable="false" text="指令类型"/>
-            <TableColumn fx:id="cmdColumn" prefWidth="109.0" sortable="false" text="指令"/>
-            <TableColumn fx:id="cmdNameColumn" prefWidth="163.0" sortable="false" text="指令名称"/>
+            <TableColumn fx:id="cmdTypeColumn" prefWidth="67.0" sortable="false" text="种族"/>
+            <TableColumn fx:id="cmdColumn" prefWidth="106.0" sortable="false" text="指令"/>
+            <TableColumn fx:id="cmdNameColumn" prefWidth="224.0" sortable="false" text="指令名称"/>
             <TableColumn fx:id="hotKeyColumn" prefWidth="62.0" sortable="false" text="快捷键"/>
         </columns>
     </TableView>

@@ -56,13 +56,13 @@ public class HotKeyServiceImpl implements HotKeyService {
         }
 
         // 刷新加载记录
-        refreshLoadRecord(configFilePath, refHotKeys);
+        refreshDB(configFilePath, refHotKeys);
 
         List<CmdHotKeyDTO> hotKeys =
                 refHotKeys.stream().map(this::buildDTO).collect(Collectors.toList());
 
         // 后台翻译(如果翻译的文本不完整的话)
-        newDaemonThread(() -> translationManager.perfect(hotKeys)).start();
+        newDaemonThread(() -> translationManager.machine(hotKeys)).start();
 
         return hotKeys;
     }
@@ -81,7 +81,7 @@ public class HotKeyServiceImpl implements HotKeyService {
         CmdHotKeyDO target = cmdHotKeyManager.requireByCmd(cmd);
 
         // 不是强制更新，检查热键冲突检查
-        if (!force) checkConflict(pathname, target);
+        if (!force) checkConflict(pathname, target, hotKey);
 
         // 修改快捷键
         cmdHotKeyManager.updateHotKey(pathname, target, hotKey);
@@ -89,7 +89,8 @@ public class HotKeyServiceImpl implements HotKeyService {
         log.info("update cmd {} hotkey to {}", cmd, hotKey);
     }
 
-    private void checkConflict(String pathname, CmdHotKeyDO target) throws HotKeyConflictException {
+    private void checkConflict(String pathname, CmdHotKeyDO target, String hotKey)
+            throws HotKeyConflictException {
         // 获取所有快捷键
         List<RefHotKey> refHotKeys = cmdHotKeyManager.readHotKeys(pathname);
         if (CollectionUtils.isEmpty(refHotKeys)) {
@@ -97,14 +98,11 @@ public class HotKeyServiceImpl implements HotKeyService {
         }
         List<CmdHotKeyDTO> cmdHotKeys = refHotKeys.stream().map(this::buildDTO).toList();
 
-        // 可能冲突的快捷键
-        List<CmdHotKeyDTO> mayConflicts =
-                cmdHotKeys.stream().filter(hotKey -> mayConflict(target, hotKey)).toList();
-
         // 过滤冲突快捷键
         List<CmdHotKeyDTO> conflicts =
-                mayConflicts.stream()
-                        .filter(key -> Objects.equals(key.getHotKey(), target.getHotKey()))
+                cmdHotKeys.stream()
+                        .filter(dto -> mayConflict(target, dto))
+                        .filter(dto -> Objects.equals(dto.getHotKey(), hotKey))
                         .toList();
         if (CollectionUtils.isEmpty(conflicts)) {
             return;
@@ -120,13 +118,17 @@ public class HotKeyServiceImpl implements HotKeyService {
         // 同类类型指令提示信息拼接, 指令类型[指令1、指令2...指令n]
         Function<? super Map.Entry<Integer, List<CmdHotKeyDTO>>, ? extends String> prettyCmd =
                 entry ->
-                        CmdTypeEnum.from(entry.getKey()).getDesc()
+                        CmdTypeEnum.from(entry.getKey()).getRace().getDesc()
                                 + "["
                                 + entry.getValue().stream()
                                         .map(CmdHotKeyDTO::getTranslation)
                                         .collect(Collectors.joining("、"))
                                 + "]";
 
+        // 指令类型1[指令1、指令2...指令n],
+        // 指令类型2[指令1、指令2...指令n],
+        // ......
+        // 指令类型n[指令1、指令2...指令n]
         return conflictMap.entrySet().stream().map(prettyCmd).collect(Collectors.joining(",\n"));
     }
 
@@ -144,22 +146,22 @@ public class HotKeyServiceImpl implements HotKeyService {
         }
 
         // 公共快捷键和其他快捷键会冲突
-        if (CmdTypeEnum.Shared.getType().equals(target.getCmdType())
-                || CmdTypeEnum.Shared.getType().equals(may.getCmdType())) {
-            return true;
-        }
+        //        if (CmdTypeEnum.Shared.getType().equals(target.getCmdType())
+        //                || CmdTypeEnum.Shared.getType().equals(may.getCmdType())) {
+        //            return true;
+        //        }
 
         // 同类型快捷键会冲突
         return Objects.equals(target.getCmdType(), may.getCmdType());
     }
 
-    private void refreshLoadRecord(String configFilePath, List<RefHotKey> refHotKeys) {
+    private void refreshDB(String configFilePath, List<RefHotKey> refHotKeys) {
         // 刷新快捷键记录
         Integer hotKeyLines = cmdHotKeyManager.refresh(refHotKeys);
         // 刷新加载记录
         Integer recordLines = loadRecordManager.refresh(configFilePath);
 
-        log.info("insert hotkey {} lines, update record {} lines", hotKeyLines, recordLines);
+        log.info("insert hotkey {} lines, update load record {} lines", hotKeyLines, recordLines);
     }
 
     private CmdHotKeyDTO buildDTO(RefHotKey refHotKey) {
@@ -169,7 +171,7 @@ public class HotKeyServiceImpl implements HotKeyService {
                 .cmd(refHotKey.getCmd())
                 .comments(refHotKey.getComments())
                 .cmdType(refHotKey.getCmdType())
-                .cmdTypeDesc(CmdTypeEnum.from(refHotKey.getCmdType()).getDesc())
+                .cmdTypeDesc(CmdTypeEnum.from(refHotKey.getCmdType()).getRace().getDesc())
                 .translation(translations.getProperty(refHotKey.getCmd()))
                 .hotKey(refHotKey.getHotKey())
                 .build();

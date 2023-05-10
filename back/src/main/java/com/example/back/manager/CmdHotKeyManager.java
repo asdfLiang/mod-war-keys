@@ -10,6 +10,7 @@ import com.example.dal.entity.CmdHotKeyDO;
 import com.example.dal.mapper.CmdHotKeyMapper;
 import com.example.dal.mapper.SequenceMapper;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -122,10 +123,7 @@ public class CmdHotKeyManager {
 
     private CmdHotKeyDO buildDO(RefHotKey refHotKey) {
         CmdHotKeyDO cmdHotKeyDO = new CmdHotKeyDO();
-        cmdHotKeyDO.setRow(refHotKey.getRow());
-        cmdHotKeyDO.setCmd(refHotKey.getCmd());
-        cmdHotKeyDO.setCmdType(refHotKey.getCmdType());
-        cmdHotKeyDO.setHotKey(refHotKey.getHotKey());
+        BeanUtils.copyProperties(refHotKey, cmdHotKeyDO);
 
         return cmdHotKeyDO;
     }

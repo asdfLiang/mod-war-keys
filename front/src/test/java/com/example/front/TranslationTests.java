@@ -1,21 +1,21 @@
 package com.example.front;
 
-import com.example.FrontApplication;
 import com.example.transaction.Translator;
 import com.example.transaction.TranslatorFactory;
 import com.example.transaction.enums.LanguageEnum;
 import com.example.transaction.enums.TranslatorEnum;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 /**
  * @since 2023/4/14 23:37
  * @author by liangzj
  */
-@ContextConfiguration(classes = {FrontApplication.class})
+@ExtendWith(SpringExtension.class)
 @SpringBootTest
 public class TranslationTests {
 

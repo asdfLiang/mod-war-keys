@@ -108,7 +108,7 @@ public class ModKeyController implements Initializable {
         } catch (HotKeyConflictException e) {
             // 检测到冲突，进行二次确认
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setContentText(e.getMessage() + ", 是否确认修改？");
+            alert.setContentText(e.getMessage() + ", \n是否确认修改？");
             Optional<ButtonType> buttonType = alert.showAndWait();
             ButtonType confirm = buttonType.orElse(ButtonType.CANCEL);
 
