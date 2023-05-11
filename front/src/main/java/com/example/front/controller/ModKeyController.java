@@ -3,6 +3,7 @@ package com.example.front.controller;
 import com.example.back.manager.dto.CmdHotKeyDTO;
 import com.example.back.service.HotKeyService;
 import com.example.back.service.RecordService;
+import com.example.back.service.TranslationService;
 import com.example.back.support.exceptions.HotKeyConflictException;
 import com.example.commons.utils.StringUtil;
 import com.example.front.vo.CmdHotKeyVO;
@@ -37,6 +38,7 @@ import java.util.ResourceBundle;
 public class ModKeyController implements Initializable {
     @Autowired private HotKeyService hotKeyService;
     @Autowired private RecordService recordService;
+    @Autowired private TranslationService translationService;
 
     private final Stage stage = AbstractJavaFxApplicationSupport.getStage();
     @FXML private TextField configPathInput;
@@ -82,6 +84,7 @@ public class ModKeyController implements Initializable {
         // 读取指令
         List<CmdHotKeyDTO> hotKeys = hotKeyService.load(filePath);
         if (CollectionUtils.isEmpty(hotKeys)) return;
+
         List<CmdHotKeyVO> hotKeyVOS = hotKeys.stream().map(this::buildVO).toList();
 
         // 展示指令
@@ -93,9 +96,14 @@ public class ModKeyController implements Initializable {
         tableView.setEditable(true);
         cmdTypeColumn.setCellValueFactory(new PropertyValueFactory<>("cmdTypeDesc"));
         cmdColumn.setCellValueFactory(new PropertyValueFactory<>("cmd"));
-        cmdNameColumn.setCellValueFactory(new PropertyValueFactory<>("cmdTranslation"));
 
-        // 快捷键编辑
+        // 编辑翻译
+        cmdNameColumn.setCellValueFactory(new PropertyValueFactory<>("cmdTranslation"));
+        cmdNameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        cmdNameColumn.setOnEditCommit(
+                evt -> translationService.manual(evt.getRowValue().getCmd(), evt.getNewValue()));
+
+        // 编辑快捷键
         hotKeyColumn.setCellValueFactory(new PropertyValueFactory<>("hotKey"));
         hotKeyColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         hotKeyColumn.setOnEditCommit(this::confirmUpdate);

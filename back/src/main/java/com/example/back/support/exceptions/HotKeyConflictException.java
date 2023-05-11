@@ -4,7 +4,6 @@ package com.example.back.support.exceptions;
  * @author by liangzj
  */
 public class HotKeyConflictException extends RuntimeException {
-    public String message;
 
     public HotKeyConflictException(String message) {
         super(message);
