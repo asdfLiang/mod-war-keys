@@ -1,10 +1,12 @@
-create table cmd_hot_key
+CREATE TABLE cmd_hot_key
 (
-    id      INTEGER not null primary key autoincrement,
-    cmd     VARCHAR(64),
-    row     INTEGER not null,
-    hot_key VARCHAR(16)
+    id       INTEGER not null primary key autoincrement,
+    cmd      VARCHAR(64),
+    row      INTEGER not null,
+    hot_key  VARCHAR(16),
+    cmd_type INTEGER
 );
+
 
 create unique index uni_cmd
     on cmd_hot_key (cmd);

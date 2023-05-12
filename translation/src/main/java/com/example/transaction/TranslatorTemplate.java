@@ -1,6 +1,7 @@
 package com.example.transaction;
 
 import com.example.commons.utils.StringUtil;
+import com.example.commons.utils.ThreadUtil;
 
 import java.net.http.HttpResponse;
 import java.util.HashMap;
@@ -18,6 +19,8 @@ public abstract class TranslatorTemplate extends HttpTemplate implements Transla
         if (StringUtil.isBlank(text)) {
             return "";
         }
+
+        ThreadUtil.sleep(1);
 
         HashMap<String, String> params = new HashMap<>();
         params.put("text", text);

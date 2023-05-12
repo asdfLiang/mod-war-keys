@@ -21,7 +21,7 @@ import java.util.*;
  */
 @Component
 public class TranslationManager {
-    @Value("{translation.engine}")
+    @Value("${translation.engine}")
     private String engine;
 
     @Value("${translation.pathname}")

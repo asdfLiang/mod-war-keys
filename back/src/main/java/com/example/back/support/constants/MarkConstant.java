@@ -16,4 +16,7 @@ public final class MarkConstant {
 
     /** 热键行前缀 */
     public static final String HOTKEY_START = "Hotkey=";
+
+    /** 取消热键行前缀 */
+    public static final String UN_HOTKEY_START = "Unhotkey=";
 }

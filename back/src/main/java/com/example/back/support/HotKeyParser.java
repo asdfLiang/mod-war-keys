@@ -37,6 +37,10 @@ public class HotKeyParser {
             } else if (line.startsWith(HOTKEY_START)) {
                 refHotKeys.add(
                         new RefHotKey(row, cmd, cmdType, comments, getHotKey(line)).require());
+            } else if (line.startsWith(UN_HOTKEY_START)) {
+                refHotKeys.add(
+                        new RefHotKey(row, getUnCmd(cmd), cmdType, comments, getUnHotKey(line))
+                                .require());
             }
             row++;
         }
@@ -57,8 +61,16 @@ public class HotKeyParser {
         return line.substring(1, line.length() - 1);
     }
 
+    private static String getUnCmd(String cmd) {
+        return "Un" + cmd;
+    }
+
     private static String getHotKey(String line) {
         return line.replaceAll(HOTKEY_START, "").trim();
+    }
+
+    private static String getUnHotKey(String line) {
+        return line.replaceAll(UN_HOTKEY_START, "").trim();
     }
 
     public static void main(String[] args) {
