@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
+import java.io.File;
 import java.nio.file.Path;
 import java.util.*;
 
@@ -27,6 +28,9 @@ public class TranslationManager {
     @Value("${translation.pathname}")
     private String pathname;
 
+    @Value("${translation.default.filename}")
+    private String filename;
+
     @Autowired private TranslatorFactory translatorFactory;
 
     /** 自动机翻，检查是否有未翻译的文本，如果有，进行翻译 */
@@ -35,7 +39,7 @@ public class TranslationManager {
             return;
         }
 
-        Path path = FileUtil.getPath(pathname);
+        Path path = FileUtil.getPath(obtainPathname());
         // 读取翻译文本
         Properties local = PropertiesUtil.load(path);
 
@@ -56,17 +60,42 @@ public class TranslationManager {
      * @param translation 翻译
      */
     public void manual(String cmd, String translation) {
-        Path path = FileUtil.getPath(pathname);
+        Path path = FileUtil.getPath(obtainPathname());
         // 读取翻译文本
         Properties local = PropertiesUtil.load(path);
 
         local.setProperty(cmd, translation);
-        PropertiesUtil.store(path, local, "manual update at " + new Date());
+        PropertiesUtil.store(path, local, "manual update");
+    }
+
+    /**
+     * 获取本地翻译文件
+     *
+     * @return 本地翻译文件
+     */
+    public Properties getTranslations() {
+        return PropertiesUtil.load(FileUtil.getPath(obtainPathname()));
     }
 
     private String translate(String key) {
         return translatorFactory
                 .get(TranslatorEnum.from(engine))
                 .translate(key, LanguageEnum.EN.name(), LanguageEnum.ZH.name());
+    }
+
+    private String obtainPathname() {
+        if (FileUtil.getPath(pathname).toFile().exists()) {
+            return pathname;
+        }
+
+        String localPath = new File("").getAbsolutePath() + "\\" + filename;
+        if (FileUtil.getPath(localPath).toFile().exists()) {
+            return localPath;
+        }
+
+        Properties properties = new Properties();
+        PropertiesUtil.store(FileUtil.getPath(localPath), properties, "system create");
+
+        return localPath;
     }
 }

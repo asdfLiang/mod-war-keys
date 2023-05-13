@@ -11,7 +11,6 @@ import com.example.back.support.enums.CmdTypeEnum;
 import com.example.back.support.enums.RaceEnum;
 import com.example.back.support.exceptions.HotKeyConflictException;
 import com.example.commons.utils.FileUtil;
-import com.example.commons.utils.PropertiesUtil;
 import com.example.dal.entity.CmdHotKeyDO;
 import com.example.dal.entity.RefHotKey;
 
@@ -19,7 +18,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -34,9 +32,6 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 public class HotKeyServiceImpl implements HotKeyService {
-
-    @Value("${translation.pathname}")
-    private String pathname;
 
     @Autowired private CmdHotKeyManager cmdHotKeyManager;
 
@@ -178,7 +173,7 @@ public class HotKeyServiceImpl implements HotKeyService {
     }
 
     private CmdHotKeyDTO buildDTO(RefHotKey refHotKey) {
-        Properties translations = PropertiesUtil.load(FileUtil.getPath(pathname));
+        Properties translations = translationManager.getTranslations();
 
         return CmdHotKeyDTO.builder()
                 .cmd(refHotKey.getCmd())

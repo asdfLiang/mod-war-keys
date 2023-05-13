@@ -30,12 +30,6 @@
 4. translation：翻译模块，提供基于微软、DeepL、百度等翻译引擎的翻译服务;
 5. common：通用模块，提供各种通用工具;
 
-# 待开发内容
-
-1. 支持功能键的输入
-2. 支持按照"种族"过滤快捷键
-3. 配置文件备份功能, 本地备份
-
 # 项目打包
 
 目前可以打包成jar包使用了, 启动时需要使用如下命令:
@@ -48,4 +42,11 @@ java [vm启动参数] -jar 文件名.jar
 java --module-path "E:\produce\javafx-sdk-20\lib" --add-modules javafx.controls,javafx.fxml -jar front.jar
 ```
 
-后面试试打成exe包
+后面试试打成exe包, 今天就到这
+
+# 待开发内容
+
+1. 支持功能键的输入
+2. 支持按照"种族"过滤快捷键
+3. 配置文件备份功能, 本地备份
+4. 界面优化

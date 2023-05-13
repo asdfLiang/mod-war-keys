@@ -1,5 +1,7 @@
 package com.example.commons.utils;
 
+import lombok.extern.slf4j.Slf4j;
+
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
@@ -14,6 +16,7 @@ import java.util.Objects;
  * @since 2023/3/18 16:16
  * @author by liangzj
  */
+@Slf4j
 public class FileUtil {
 
     public static Path getPath(String pathname) {
@@ -21,9 +24,13 @@ public class FileUtil {
             throw new IllegalArgumentException("pathname不能为空");
         }
 
-        File file = new File(pathname);
-
-        return Paths.get(file.getParent(), file.getName());
+        try {
+            File file = new File(pathname);
+            return Paths.get(file.getParent(), file.getName());
+        } catch (Exception e) {
+            log.warn("文件导入失败, root: {}, pathname: {}", new File("").getAbsolutePath(), pathname, e);
+            throw new RuntimeException("文件导入异常!");
+        }
     }
 
     public static boolean isText(String pathname) {
