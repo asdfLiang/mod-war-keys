@@ -8,9 +8,8 @@ import javafx.stage.Stage;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.PropertySource;
 
-// @PropertySource(value = {"file:D:\\liangzj\\Documents\\translation.properties"})
-@MapperScan(basePackages = {"com.example.dal.mapper"})
 @SpringBootApplication(
         scanBasePackages = {
             "com.example.front",
@@ -18,6 +17,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
             "com.example.transaction",
             "com.example.dal",
         })
+@MapperScan(basePackages = {"com.example.dal.mapper"})
+@PropertySource("classpath:application.properties")
 public class FrontApplication extends AbstractJavaFxApplicationSupport {
 
     public static void main(String[] args) {

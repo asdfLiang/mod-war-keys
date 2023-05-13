@@ -35,3 +35,10 @@
 1. 支持功能键的输入
 2. 支持按照"种族"过滤快捷键
 3. 配置文件备份功能, 本地备份
+
+# 项目打包
+目前可以打包成jar包使用了, 启动时需要使用如下命令:
+```shell
+java --module-path "E:\produce\javafx-sdk-20\lib" --add-modules javafx.controls,javafx.fxml -jar front.jar
+```
+后面试试打成exe包
