@@ -73,11 +73,11 @@ public class HotKeyParser {
         return line.replaceAll(UN_HOTKEY_START, "").trim();
     }
 
-    public static void main(String[] args) {
-        System.out.println(Pattern.matches(COMMENTS_START_REGEX, "////////////"));
-        System.out.println(Pattern.matches(COMMENTS_START_REGEX, "//abc"));
-        System.out.println(Pattern.matches(COMMENTS_START_REGEX, "// abc"));
-        System.out.println(Pattern.matches(COMMENTS_START_REGEX, "// abc&"));
-        System.out.println(Pattern.matches(COMMENTS_START_REGEX, "//orc melee weapon upgrades"));
-    }
+//    public static void main(String[] args) {
+//        System.out.println(Pattern.matches(COMMENTS_START_REGEX, "////////////"));
+//        System.out.println(Pattern.matches(COMMENTS_START_REGEX, "//abc"));
+//        System.out.println(Pattern.matches(COMMENTS_START_REGEX, "// abc"));
+//        System.out.println(Pattern.matches(COMMENTS_START_REGEX, "// abc&"));
+//        System.out.println(Pattern.matches(COMMENTS_START_REGEX, "//orc melee weapon upgrades"));
+//    }
 }

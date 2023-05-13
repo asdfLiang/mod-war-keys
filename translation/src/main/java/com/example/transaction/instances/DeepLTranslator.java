@@ -61,12 +61,12 @@ public class DeepLTranslator extends TranslatorTemplate implements Translator {
                 .getString("text");
     }
 
-    public static void main(String[] args) {
-        Translator translator = new DeepLTranslator();
-
-        System.out.println(translator.translate("こんにちは", null, LanguageEnum.ZH.name()));
-        System.out.println(translator.translate("Hello World", null, LanguageEnum.ZH.name()));
-    }
+//    public static void main(String[] args) {
+//        Translator translator = new DeepLTranslator();
+//
+//        System.out.println(translator.translate("こんにちは", null, LanguageEnum.ZH.name()));
+//        System.out.println(translator.translate("Hello World", null, LanguageEnum.ZH.name()));
+//    }
 
     private String format() {
         return """

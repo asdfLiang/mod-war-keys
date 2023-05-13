@@ -69,12 +69,12 @@ public class MicrosoftTranslator extends TranslatorTemplate implements Translato
         return "Bearer " + HttpUtil.get(authUrl, null, null).body();
     }
 
-    public static void main(String[] args) {
-        MicrosoftTranslator translator = new MicrosoftTranslator();
-
-        System.out.println(translator.getAuthorization());
-
-        System.out.println(translator.translate("こんにちは", null, LanguageEnum.ZH.name()));
-        System.out.println(translator.translate("Hello World", null, LanguageEnum.ZH.name()));
-    }
+//    public static void main(String[] args) {
+//        MicrosoftTranslator translator = new MicrosoftTranslator();
+//
+//        System.out.println(translator.getAuthorization());
+//
+//        System.out.println(translator.translate("こんにちは", null, LanguageEnum.ZH.name()));
+//        System.out.println(translator.translate("Hello World", null, LanguageEnum.ZH.name()));
+//    }
 }

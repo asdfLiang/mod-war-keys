@@ -81,14 +81,14 @@ public class BaiduTranslator extends TranslatorTemplate implements Translator {
         return DigestUtils.md5DigestAsHex(sign.getBytes());
     }
 
-    public static void main(String[] args) {
-        Translator translator = new BaiduTranslator();
-
-        System.out.println(
-                DigestUtils.md5DigestAsHex("2015063000000001apple143566028812345678".getBytes()));
-
-        System.out.println(translator.translate("apple", null, "zh"));
-        System.out.println(translator.translate("こんにちは", null, "zh"));
-        //        System.out.println(translator.translate("Hello World", null, "zh"));
-    }
+//    public static void main(String[] args) {
+//        Translator translator = new BaiduTranslator();
+//
+//        System.out.println(
+//                DigestUtils.md5DigestAsHex("2015063000000001apple143566028812345678".getBytes()));
+//
+//        System.out.println(translator.translate("apple", null, "zh"));
+//        System.out.println(translator.translate("こんにちは", null, "zh"));
+//        //        System.out.println(translator.translate("Hello World", null, "zh"));
+//    }
 }
