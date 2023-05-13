@@ -1,9 +1,9 @@
 package com.example.back.manager;
 
-import com.example.commons.utils.StringUtil;
 import com.example.dal.entity.LoadRecordDO;
 import com.example.dal.mapper.LoadRecordMapper;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -18,7 +18,7 @@ public class LoadRecordManager {
     @Autowired private LoadRecordMapper loadRecordMapper;
 
     public Integer refresh(String pathname) {
-        if (StringUtil.isBlank(pathname)) {
+        if (StringUtils.isBlank(pathname)) {
             return 0;
         }
 

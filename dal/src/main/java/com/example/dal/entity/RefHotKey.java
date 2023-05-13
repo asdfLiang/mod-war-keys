@@ -1,10 +1,10 @@
 package com.example.dal.entity;
 
-import com.example.commons.utils.StringUtil;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
 
@@ -36,7 +36,7 @@ public class RefHotKey {
 
     /** 检查并返回当前对象 */
     public RefHotKey require() {
-        if (Objects.nonNull(row) && Objects.nonNull(cmdType) && StringUtil.isNotBlank(cmd)) {
+        if (Objects.nonNull(row) && Objects.nonNull(cmdType) && StringUtils.isNotBlank(cmd)) {
             return this;
         }
         throw new IllegalArgumentException("配置文件格式错误！热键信息：" + this);

@@ -5,7 +5,6 @@ import com.example.back.service.HotKeyService;
 import com.example.back.service.RecordService;
 import com.example.back.service.TranslationService;
 import com.example.back.support.exceptions.HotKeyConflictException;
-import com.example.commons.utils.StringUtil;
 import com.example.front.vo.CmdHotKeyVO;
 
 import de.felixroske.jfxsupport.AbstractJavaFxApplicationSupport;
@@ -20,6 +19,7 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 
@@ -63,7 +63,7 @@ public class ModKeyController implements Initializable {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("打开");
         File file = fileChooser.showOpenDialog(stage);
-        if (Objects.isNull(file) || StringUtil.isBlank(file.getAbsolutePath())) {
+        if (Objects.isNull(file) || StringUtils.isBlank(file.getAbsolutePath())) {
             return;
         }
 
@@ -79,7 +79,7 @@ public class ModKeyController implements Initializable {
 
     protected void refreshColumnData() {
         String filePath = configPathInput.getText();
-        if (StringUtil.isBlank(filePath)) return;
+        if (StringUtils.isBlank(filePath)) return;
 
         // 读取指令
         List<CmdHotKeyDTO> hotKeys = hotKeyService.load(filePath);

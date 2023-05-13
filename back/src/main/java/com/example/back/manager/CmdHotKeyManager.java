@@ -3,13 +3,13 @@ package com.example.back.manager;
 import static com.example.back.support.constants.MarkConstant.HOTKEY_START;
 
 import com.example.back.support.HotKeyParser;
-import com.example.dal.entity.RefHotKey;
 import com.example.commons.utils.FileUtil;
-import com.example.commons.utils.StringUtil;
 import com.example.dal.entity.CmdHotKeyDO;
+import com.example.dal.entity.RefHotKey;
 import com.example.dal.mapper.CmdHotKeyMapper;
 import com.example.dal.mapper.SequenceMapper;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -58,7 +58,7 @@ public class CmdHotKeyManager {
      * @return 快捷键记录
      */
     public CmdHotKeyDO requireByCmd(String cmd) {
-        if (StringUtil.isBlank(cmd)) {
+        if (StringUtils.isBlank(cmd)) {
             return null;
         }
 
@@ -81,7 +81,7 @@ public class CmdHotKeyManager {
      * @return 快捷键列表
      */
     public List<RefHotKey> readHotKeys(String pathname) {
-        if (StringUtil.isBlank(pathname)) {
+        if (StringUtils.isBlank(pathname)) {
             return Collections.emptyList();
         }
 

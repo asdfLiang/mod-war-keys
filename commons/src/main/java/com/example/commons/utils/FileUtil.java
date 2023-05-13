@@ -1,5 +1,7 @@
 package com.example.commons.utils;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -15,7 +17,7 @@ import java.util.Objects;
 public class FileUtil {
 
     public static Path getPath(String pathname) {
-        if (StringUtil.isBlank(pathname)) {
+        if (StringUtils.isBlank(pathname)) {
             throw new IllegalArgumentException("pathname不能为空");
         }
 
@@ -25,7 +27,7 @@ public class FileUtil {
     }
 
     public static boolean isText(String pathname) {
-        if (StringUtil.isBlank(pathname)) {
+        if (StringUtils.isBlank(pathname)) {
             throw new IllegalArgumentException("pathname不能为空");
         }
 

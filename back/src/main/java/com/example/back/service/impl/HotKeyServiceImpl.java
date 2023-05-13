@@ -7,17 +7,17 @@ import com.example.back.manager.LoadRecordManager;
 import com.example.back.manager.TranslationManager;
 import com.example.back.manager.dto.CmdHotKeyDTO;
 import com.example.back.service.HotKeyService;
-import com.example.dal.entity.RefHotKey;
 import com.example.back.support.enums.CmdTypeEnum;
 import com.example.back.support.enums.RaceEnum;
 import com.example.back.support.exceptions.HotKeyConflictException;
 import com.example.commons.utils.FileUtil;
 import com.example.commons.utils.PropertiesUtil;
-import com.example.commons.utils.StringUtil;
 import com.example.dal.entity.CmdHotKeyDO;
+import com.example.dal.entity.RefHotKey;
 
 import lombok.extern.slf4j.Slf4j;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -83,12 +83,12 @@ public class HotKeyServiceImpl implements HotKeyService {
 
     @Override
     public void update(String cmd, String hotKey, boolean force) {
-        if (!StringUtil.noneBlank(cmd, hotKey)) {
+        if (!StringUtils.isNoneEmpty(cmd, hotKey)) {
             return;
         }
 
         String pathname = loadRecordManager.latestPathname();
-        if (StringUtil.isBlank(pathname)) {
+        if (StringUtils.isBlank(pathname)) {
             throw new RuntimeException("未找到要修改的配置文件路径");
         }
         CmdHotKeyDO target = cmdHotKeyManager.requireByCmd(cmd);

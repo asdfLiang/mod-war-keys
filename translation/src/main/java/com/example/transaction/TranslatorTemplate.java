@@ -1,7 +1,8 @@
 package com.example.transaction;
 
-import com.example.commons.utils.StringUtil;
 import com.example.commons.utils.ThreadUtil;
+
+import org.apache.commons.lang3.StringUtils;
 
 import java.net.http.HttpResponse;
 import java.util.HashMap;
@@ -16,7 +17,7 @@ public abstract class TranslatorTemplate extends HttpTemplate implements Transla
 
     @Override
     public String translate(String text, String from, String to) {
-        if (StringUtil.isBlank(text)) {
+        if (StringUtils.isBlank(text)) {
             return "";
         }
 

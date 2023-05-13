@@ -1,7 +1,6 @@
 package com.example.transaction.instances;
 
 import com.alibaba.fastjson2.JSON;
-import com.example.commons.utils.MD5Util;
 import com.example.transaction.Translator;
 import com.example.transaction.TranslatorTemplate;
 import com.example.transaction.config.TranslationConfig;
@@ -9,6 +8,7 @@ import com.example.transaction.enums.TranslatorEnum;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.DigestUtils;
 
 import java.net.http.HttpResponse;
 import java.util.HashMap;
@@ -78,13 +78,14 @@ public class BaiduTranslator extends TranslatorTemplate implements Translator {
                         + body.get("salt")
                         + translationConfig.baiduSecretKey;
 
-        return MD5Util.getMd5(sign);
+        return DigestUtils.md5DigestAsHex(sign.getBytes());
     }
 
     public static void main(String[] args) {
         Translator translator = new BaiduTranslator();
 
-        System.out.println(MD5Util.getMd5("2015063000000001apple143566028812345678"));
+        System.out.println(
+                DigestUtils.md5DigestAsHex("2015063000000001apple143566028812345678".getBytes()));
 
         System.out.println(translator.translate("apple", null, "zh"));
         System.out.println(translator.translate("こんにちは", null, "zh"));
