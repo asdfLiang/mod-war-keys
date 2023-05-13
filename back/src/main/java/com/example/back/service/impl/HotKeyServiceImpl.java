@@ -7,8 +7,9 @@ import com.example.back.manager.LoadRecordManager;
 import com.example.back.manager.TranslationManager;
 import com.example.back.manager.dto.CmdHotKeyDTO;
 import com.example.back.service.HotKeyService;
-import com.example.back.support.entity.RefHotKey;
+import com.example.dal.entity.RefHotKey;
 import com.example.back.support.enums.CmdTypeEnum;
+import com.example.back.support.enums.RaceEnum;
 import com.example.back.support.exceptions.HotKeyConflictException;
 import com.example.commons.utils.FileUtil;
 import com.example.commons.utils.PropertiesUtil;
@@ -68,6 +69,19 @@ public class HotKeyServiceImpl implements HotKeyService {
     }
 
     @Override
+    public List<CmdHotKeyDTO> load(String configFilePath, Integer race) {
+        List<CmdHotKeyDTO> all = load(configFilePath);
+        if (CollectionUtils.isEmpty(all)) {
+            return Collections.emptyList();
+        }
+
+        RaceEnum retainRace = RaceEnum.from(race);
+        return all.stream()
+                .filter(dto -> CmdTypeEnum.isRace(dto.getCmdType(), retainRace))
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public void update(String cmd, String hotKey, boolean force) {
         if (!StringUtil.noneBlank(cmd, hotKey)) {
             return;
@@ -77,10 +91,9 @@ public class HotKeyServiceImpl implements HotKeyService {
         if (StringUtil.isBlank(pathname)) {
             throw new RuntimeException("未找到要修改的配置文件路径");
         }
-
         CmdHotKeyDO target = cmdHotKeyManager.requireByCmd(cmd);
 
-        // 不是强制更新，检查热键冲突检查
+        // 热键冲突检测
         if (!force) checkConflict(pathname, target, hotKey);
 
         // 修改快捷键

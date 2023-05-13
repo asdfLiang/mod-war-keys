@@ -3,7 +3,7 @@ package com.example.back.manager;
 import static com.example.back.support.constants.MarkConstant.HOTKEY_START;
 
 import com.example.back.support.HotKeyParser;
-import com.example.back.support.entity.RefHotKey;
+import com.example.dal.entity.RefHotKey;
 import com.example.commons.utils.FileUtil;
 import com.example.commons.utils.StringUtil;
 import com.example.dal.entity.CmdHotKeyDO;

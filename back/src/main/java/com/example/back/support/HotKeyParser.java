@@ -2,7 +2,7 @@ package com.example.back.support;
 
 import static com.example.back.support.constants.MarkConstant.*;
 
-import com.example.back.support.entity.RefHotKey;
+import com.example.dal.entity.RefHotKey;
 import com.example.back.support.enums.CmdTypeEnum;
 
 import java.io.BufferedReader;

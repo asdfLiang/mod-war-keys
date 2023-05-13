@@ -1,6 +1,7 @@
 package com.example.back.service;
 
 import com.example.back.manager.dto.CmdHotKeyDTO;
+import com.example.back.support.enums.RaceEnum;
 
 import java.util.List;
 
@@ -17,6 +18,15 @@ public interface HotKeyService {
      * @return 读取到的热键信息
      */
     List<CmdHotKeyDTO> load(String configFilePath);
+
+    /**
+     * 根据种族读取用户本地自定义快捷键文件
+     *
+     * @param configFilePath 自定义热键配置文件路径
+     * @param race {@link RaceEnum#getRace() 种族}
+     * @return 读取到的热键信息
+     */
+    List<CmdHotKeyDTO> load(String configFilePath, Integer race);
 
     /**
      * 更新热键

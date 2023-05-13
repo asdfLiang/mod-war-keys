@@ -56,4 +56,16 @@ public enum CmdTypeEnum {
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("unknown type: " + type));
     }
+
+    public static CmdTypeEnum from(RaceEnum race) {
+        return Arrays.stream(CmdTypeEnum.values())
+                .filter(typeEnum -> typeEnum.getRace() == race)
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("unknown race: " + race));
+    }
+
+    public static boolean isRace(int type, RaceEnum race) {
+        CmdTypeEnum cmdType = from(type);
+        return cmdType.getRace() == race;
+    }
 }

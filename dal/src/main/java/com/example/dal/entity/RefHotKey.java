@@ -1,4 +1,4 @@
-package com.example.back.support.entity;
+package com.example.dal.entity;
 
 import com.example.commons.utils.StringUtil;
 
