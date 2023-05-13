@@ -72,7 +72,7 @@ public class HotKeyServiceImpl implements HotKeyService {
 
         RaceEnum retainRace = RaceEnum.from(race);
         return all.stream()
-                .filter(dto -> CmdTypeEnum.isRace(dto.getCmdType(), retainRace))
+                .filter(dto -> CmdTypeEnum.isRace(dto.getCmdType().getType(), retainRace))
                 .collect(Collectors.toList());
     }
 
@@ -121,7 +121,8 @@ public class HotKeyServiceImpl implements HotKeyService {
 
     private String joinConflictCmd(List<CmdHotKeyDTO> conflicts) {
         Map<Integer, List<CmdHotKeyDTO>> conflictMap =
-                conflicts.stream().collect(Collectors.groupingBy(CmdHotKeyDTO::getCmdType));
+                conflicts.stream()
+                        .collect(Collectors.groupingBy(dto -> dto.getCmdType().getType()));
 
         // 同类类型指令提示信息拼接, 指令类型[指令1、指令2...指令n]
         Function<? super Map.Entry<Integer, List<CmdHotKeyDTO>>, ? extends String> prettyCmd =
@@ -160,7 +161,7 @@ public class HotKeyServiceImpl implements HotKeyService {
         //        }
 
         // 同类型快捷键会冲突
-        return Objects.equals(target.getCmdType(), may.getCmdType());
+        return Objects.equals(target.getCmdType(), may.getCmdType().getType());
     }
 
     private void refreshDB(String configFilePath, List<RefHotKey> refHotKeys) {
@@ -178,8 +179,7 @@ public class HotKeyServiceImpl implements HotKeyService {
         return CmdHotKeyDTO.builder()
                 .cmd(refHotKey.getCmd())
                 .comments(refHotKey.getComments())
-                .cmdType(refHotKey.getCmdType())
-                .cmdTypeDesc(CmdTypeEnum.from(refHotKey.getCmdType()).getRace().getDesc())
+                .cmdType(CmdTypeEnum.from(refHotKey.getCmdType()))
                 .translation(translations.getProperty(refHotKey.getCmd()))
                 .hotKey(refHotKey.getHotKey())
                 .build();

@@ -1,4 +1,5 @@
 package com.example.back.support.constants;
+
 /**
  * 配置内容固定标记，用来识别配置信息
  *
@@ -17,6 +18,12 @@ public final class MarkConstant {
     /** 热键行前缀 */
     public static final String HOTKEY_START = "Hotkey=";
 
-    /** 取消热键行前缀 */
+    /** 自动执行 */
     public static final String UN_HOTKEY_START = "Unhotkey=";
+
+    /** 升级技能热键 */
+    public static final String RESEARCH_HOTKEY_START = "Researchhotkey=";
+
+    public static final String UN_CMD_START = "Un";
+    public static final String RES_CMD_START = "Res";
 }

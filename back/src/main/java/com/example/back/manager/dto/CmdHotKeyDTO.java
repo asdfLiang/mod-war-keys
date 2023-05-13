@@ -1,5 +1,6 @@
 package com.example.back.manager.dto;
 
+import com.example.back.support.enums.CmdTypeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,11 +24,8 @@ public class CmdHotKeyDTO {
     /** 指令说明 */
     private String comments;
 
-    /** 指令类型 */
-    private Integer cmdType;
-
     /** 指令类型说明 */
-    private String cmdTypeDesc;
+    private CmdTypeEnum cmdType;
 
     /** 指令说明翻译 */
     private String translation;

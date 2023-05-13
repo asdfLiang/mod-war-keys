@@ -1,7 +1,5 @@
 package com.example.back.manager;
 
-import static com.example.back.support.constants.MarkConstant.HOTKEY_START;
-
 import com.example.back.support.HotKeyParser;
 import com.example.commons.utils.FileUtil;
 import com.example.dal.entity.CmdHotKeyDO;
@@ -110,12 +108,11 @@ public class CmdHotKeyManager {
             return;
         }
 
+        String prefix = HotKeyParser.getHotKeyPrefix(target.getCmd());
+
         // 修改文件行
         FileUtil.updateLine(
-                pathname,
-                target.getRow(),
-                HOTKEY_START + target.getHotKey(),
-                HOTKEY_START + newHotKey);
+                pathname, target.getRow(), prefix + target.getHotKey(), prefix + newHotKey);
 
         // 刷新数据库
         refresh(readHotKeys(pathname));

@@ -15,8 +15,11 @@ public class CmdHotKeyVO {
     /** 指令 */
     private String cmd;
 
-    /** 指令类型 */
-    private String cmdTypeDesc;
+    /** 种族 */
+    private String raceDesc;
+
+    /** 单位类型 */
+    private String unitTypeDesc;
 
     /** 指令说明 */
     private String cmdTranslation;

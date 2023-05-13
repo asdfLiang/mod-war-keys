@@ -2,25 +2,22 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.AnchorPane?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="449.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17"
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="460.0" prefWidth="670.0" xmlns="http://javafx.com/javafx/17"
             fx:controller="com.example.front.controller.ModKeyController">
 
-    <Button alignment="TOP_LEFT" layoutX="449.0" layoutY="35.0" onAction="#selectFile" text="选择配置文件"/>
+    <Button alignment="TOP_LEFT" layoutX="517.0" layoutY="35.0" onAction="#selectFile" text="选择配置文件"/>
 
-    <TextField fx:id="configPathInput" alignment="TOP_LEFT" disable="true" layoutX="63.0" layoutY="35.0"
-               prefHeight="23.0" prefWidth="377.0" promptText="配置文件路径"/>
+    <TextField fx:id="configPathInput" alignment="TOP_LEFT" disable="true" layoutX="66.0" layoutY="35.0"
+               prefHeight="23.0" prefWidth="440.0" promptText="配置文件路径"/>
 
-    <TableView fx:id="tableView" layoutX="63.0" layoutY="69.0" prefHeight="307.0" prefWidth="474.0">
+    <TableView fx:id="tableView" layoutX="66.0" layoutY="71.0" prefHeight="344.0" prefWidth="539.0">
         <columns>
-            <TableColumn fx:id="cmdTypeColumn" prefWidth="67.0" sortable="false" text="种族"/>
-            <TableColumn fx:id="cmdColumn" prefWidth="106.0" sortable="false" text="指令"/>
-            <TableColumn fx:id="cmdNameColumn" prefWidth="224.0" sortable="false" text="指令名称"/>
-            <TableColumn fx:id="hotKeyColumn" prefWidth="62.0" sortable="false" text="快捷键"/>
+            <TableColumn fx:id="raceColumn" prefWidth="67.0" sortable="false" text="种族"/>
+            <TableColumn fx:id="cmdTypeColumn" prefWidth="94.0" sortable="false" text="单位类型"/>
+            <TableColumn fx:id="cmdColumn" prefWidth="85.0" sortable="false" text="指令"/>
+            <TableColumn fx:id="cmdNameColumn" prefWidth="218.0" sortable="false" text="指令名称"/>
+            <TableColumn fx:id="hotKeyColumn" prefWidth="61.0" sortable="false" text="快捷键"/>
         </columns>
     </TableView>
-
-    <Button alignment="TOP_LEFT" layoutX="441.0" layoutY="398.0" text="确定"/>
-
-    <Button alignment="TOP_LEFT" layoutX="497.0" layoutY="398.0" onAction="#quit" text="退出"/>
 
 </AnchorPane>

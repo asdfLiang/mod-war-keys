@@ -54,6 +54,7 @@ public class FileUtil {
 
             // 检查当前内容是否与导入时一致
             if (!Objects.equals(expect, lines.get(lineNumber))) {
+                log.error("file expire, expect: {}, value: {}", expect, lines.get(lineNumber));
                 throw new IllegalArgumentException("文件已被修改，请重新加载");
             }
 

@@ -43,6 +43,7 @@ public class ModKeyController implements Initializable {
     private final Stage stage = AbstractJavaFxApplicationSupport.getStage();
     @FXML private TextField configPathInput;
     @FXML private TableView<CmdHotKeyVO> tableView = new TableView<>();
+    @FXML private TableColumn<CmdHotKeyVO, String> raceColumn = new TableColumn<>();
     @FXML private TableColumn<CmdHotKeyVO, String> cmdTypeColumn = new TableColumn<>();
     @FXML private TableColumn<CmdHotKeyVO, String> cmdColumn = new TableColumn<>();
     @FXML private TableColumn<CmdHotKeyVO, String> cmdNameColumn = new TableColumn<>();
@@ -89,30 +90,38 @@ public class ModKeyController implements Initializable {
 
         // 展示指令
         tableView.setItems(FXCollections.observableList(hotKeyVOS));
+        tableView.refresh();
     }
 
     /** 绑定每列的数据 */
     protected void bindColumnData() {
         tableView.setEditable(true);
-        cmdTypeColumn.setCellValueFactory(new PropertyValueFactory<>("cmdTypeDesc"));
+        raceColumn.setCellValueFactory(new PropertyValueFactory<>("raceDesc"));
+        cmdTypeColumn.setCellValueFactory(new PropertyValueFactory<>("unitTypeDesc"));
         cmdColumn.setCellValueFactory(new PropertyValueFactory<>("cmd"));
 
         // 编辑翻译
         cmdNameColumn.setCellValueFactory(new PropertyValueFactory<>("cmdTranslation"));
         cmdNameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-        cmdNameColumn.setOnEditCommit(
-                evt -> translationService.manual(evt.getRowValue().getCmd(), evt.getNewValue()));
+        cmdNameColumn.setOnEditCommit(this::manualTranslation);
 
         // 编辑快捷键
         hotKeyColumn.setCellValueFactory(new PropertyValueFactory<>("hotKey"));
         hotKeyColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-        hotKeyColumn.setOnEditCommit(this::confirmUpdate);
+        hotKeyColumn.setOnEditCommit(event -> confirmUpdate(event, false));
+    }
+
+    private void manualTranslation(TableColumn.CellEditEvent<CmdHotKeyVO, String> event) {
+        translationService.manual(event.getRowValue().getCmd(), event.getNewValue());
+
+        // 刷新列表
+        refreshColumnData();
     }
 
     /** 确认更新快捷键 */
-    private void confirmUpdate(TableColumn.CellEditEvent<CmdHotKeyVO, String> event) {
+    private void confirmUpdate(TableColumn.CellEditEvent<CmdHotKeyVO, String> event, boolean ok) {
         try {
-            hotKeyService.update(event.getRowValue().getCmd(), event.getNewValue(), false);
+            hotKeyService.update(event.getRowValue().getCmd(), event.getNewValue(), ok);
         } catch (HotKeyConflictException e) {
             // 检测到冲突，进行二次确认
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -121,16 +130,29 @@ public class ModKeyController implements Initializable {
             ButtonType confirm = buttonType.orElse(ButtonType.CANCEL);
 
             if (ButtonType.OK == confirm || ButtonType.YES == confirm) {
-                hotKeyService.update(event.getRowValue().getCmd(), event.getNewValue(), true);
+                confirmUpdate(event, true);
+                return;
             }
+        } catch (IllegalArgumentException e) {
+            alertError(e.getMessage());
         }
 
         // 刷新列表
         refreshColumnData();
     }
 
+    private static void alertError(String errorMsg) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setContentText(errorMsg);
+        alert.showAndWait();
+    }
+
     private CmdHotKeyVO buildVO(CmdHotKeyDTO dto) {
         return new CmdHotKeyVO(
-                dto.getCmd(), dto.getCmdTypeDesc(), dto.getTranslation(), dto.getHotKey());
+                dto.getCmd(),
+                dto.getCmdType().getRace().getDesc(),
+                dto.getCmdType().getUnitType().getDesc(),
+                dto.getTranslation(),
+                dto.getHotKey());
     }
 }

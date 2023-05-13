@@ -21,7 +21,7 @@ public abstract class TranslatorTemplate extends HttpTemplate implements Transla
             return "";
         }
 
-        ThreadUtil.sleep(1);
+        ThreadUtil.sleep(3);
 
         HashMap<String, String> params = new HashMap<>();
         params.put("text", text);

@@ -11,7 +11,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum SubjectEnum {
+public enum UnitTypeEnum {
     Shared(0, "通用"),
     Units(1, "单位&技能"),
     Bldgs(2, "建筑升级&技能"),

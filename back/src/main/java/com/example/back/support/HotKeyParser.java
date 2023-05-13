@@ -2,8 +2,8 @@ package com.example.back.support;
 
 import static com.example.back.support.constants.MarkConstant.*;
 
-import com.example.dal.entity.RefHotKey;
 import com.example.back.support.enums.CmdTypeEnum;
+import com.example.dal.entity.RefHotKey;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -37,6 +37,10 @@ public class HotKeyParser {
             } else if (line.startsWith(HOTKEY_START)) {
                 refHotKeys.add(
                         new RefHotKey(row, cmd, cmdType, comments, getHotKey(line)).require());
+            } else if (line.startsWith(RESEARCH_HOTKEY_START)) {
+                refHotKeys.add(
+                        new RefHotKey(row, getResCmd(cmd), cmdType, comments, getResHotKey(line))
+                                .require());
             } else if (line.startsWith(UN_HOTKEY_START)) {
                 refHotKeys.add(
                         new RefHotKey(row, getUnCmd(cmd), cmdType, comments, getUnHotKey(line))
@@ -45,6 +49,16 @@ public class HotKeyParser {
             row++;
         }
         return refHotKeys;
+    }
+
+    public static String getHotKeyPrefix(String cmd) {
+        if (cmd.startsWith(UN_CMD_START)) {
+            return UN_HOTKEY_START;
+        } else if (cmd.startsWith(RES_CMD_START)) {
+            return RESEARCH_HOTKEY_START;
+        } else {
+            return HOTKEY_START;
+        }
     }
 
     private static Integer getCmdType(String line) {
@@ -61,6 +75,10 @@ public class HotKeyParser {
         return line.substring(1, line.length() - 1);
     }
 
+    private static String getResCmd(String cmd) {
+        return "Res" + cmd;
+    }
+
     private static String getUnCmd(String cmd) {
         return "Un" + cmd;
     }
@@ -69,15 +87,20 @@ public class HotKeyParser {
         return line.replaceAll(HOTKEY_START, "").trim();
     }
 
+    private static String getResHotKey(String line) {
+        return line.replaceAll(RESEARCH_HOTKEY_START, "").trim();
+    }
+
     private static String getUnHotKey(String line) {
         return line.replaceAll(UN_HOTKEY_START, "").trim();
     }
 
-//    public static void main(String[] args) {
-//        System.out.println(Pattern.matches(COMMENTS_START_REGEX, "////////////"));
-//        System.out.println(Pattern.matches(COMMENTS_START_REGEX, "//abc"));
-//        System.out.println(Pattern.matches(COMMENTS_START_REGEX, "// abc"));
-//        System.out.println(Pattern.matches(COMMENTS_START_REGEX, "// abc&"));
-//        System.out.println(Pattern.matches(COMMENTS_START_REGEX, "//orc melee weapon upgrades"));
-//    }
+    //    public static void main(String[] args) {
+    //        System.out.println(Pattern.matches(COMMENTS_START_REGEX, "////////////"));
+    //        System.out.println(Pattern.matches(COMMENTS_START_REGEX, "//abc"));
+    //        System.out.println(Pattern.matches(COMMENTS_START_REGEX, "// abc"));
+    //        System.out.println(Pattern.matches(COMMENTS_START_REGEX, "// abc&"));
+    //        System.out.println(Pattern.matches(COMMENTS_START_REGEX, "//orc melee weapon
+    // upgrades"));
+    //    }
 }
