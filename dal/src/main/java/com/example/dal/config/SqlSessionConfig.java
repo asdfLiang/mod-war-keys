@@ -1,4 +1,4 @@
-package com.example.front.config;
+package com.example.dal.config;
 
 import lombok.extern.slf4j.Slf4j;
 
