@@ -17,7 +17,8 @@ public enum RaceEnum {
     Human(1, "人类"),
     Orc(2, "兽人"),
     Night_elf(3, "暗夜精灵"),
-    Undead(4, "不死族");
+    Undead(4, "不死族"),
+    Neutral(5, "中立");
 
     private final Integer race;
     private final String desc;

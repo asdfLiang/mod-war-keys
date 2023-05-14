@@ -1,4 +1,4 @@
-package com.example.front.vo;
+package com.example.front.controller.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

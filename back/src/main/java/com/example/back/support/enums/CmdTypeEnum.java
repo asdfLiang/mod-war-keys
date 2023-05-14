@@ -29,6 +29,7 @@ public enum CmdTypeEnum {
     Undead_Units(10, Undead, UnitTypeEnum.Units, "Undead Units & Abilities"),
     Undead_Bldgs(11, Undead, UnitTypeEnum.Bldgs, "Undead Bldgs, Upgrades & Abilities"),
     Undead_Heroes(12, Undead, UnitTypeEnum.Heroes, "Undead Heroes & Abilities"),
+    Neutral_heroes(13, Neutral, UnitTypeEnum.Heroes, "Neutral heroes & neutral hero abilities"),
     ;
 
     /** 指令类型 */
