@@ -8,9 +8,7 @@ package com.example.back.support.constants;
  */
 public final class MarkConstant {
     /** 指令说明前缀 */
-    public static final String COMMENTS_START = "// ";
-
-    public static final String COMMENTS_START_REGEX = "^//[ ]{0,1}[a-zA-z].+$";
+    public static final String COMMENTS_START = "//";
 
     /** 指令行前缀 */
     public static final String CMD_STARTS = "[";

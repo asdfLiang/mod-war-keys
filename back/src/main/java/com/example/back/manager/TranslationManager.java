@@ -84,18 +84,20 @@ public class TranslationManager {
     }
 
     private String obtainPathname() {
-        if (FileUtil.getPath(pathname).toFile().exists()) {
-            return pathname;
-        }
+        return pathname;
 
-        String localPath = new File("").getAbsolutePath() + "\\" + filename;
-        if (FileUtil.getPath(localPath).toFile().exists()) {
-            return localPath;
-        }
-
-        Properties properties = new Properties();
-        PropertiesUtil.store(FileUtil.getPath(localPath), properties, "system create");
-
-        return localPath;
+        //        if (FileUtil.getPath(pathname).toFile().exists()) {
+        //            return pathname;
+        //        }
+        //
+        //        String localPath = new File("").getAbsolutePath() + "\\" + filename;
+        //        if (FileUtil.getPath(localPath).toFile().exists()) {
+        //            return localPath;
+        //        }
+        //
+        //        Properties properties = new Properties();
+        //        PropertiesUtil.store(FileUtil.getPath(localPath), properties, "system create");
+        //
+        //        return localPath;
     }
 }

@@ -5,13 +5,14 @@ import static com.example.back.support.constants.MarkConstant.*;
 import com.example.back.support.enums.CmdTypeEnum;
 import com.example.dal.entity.RefHotKey;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.regex.Pattern;
 
 /**
  * @since 2023/4/29 10:51
@@ -30,7 +31,7 @@ public class HotKeyParser {
             // 获取指令的热键配置
             if (cmdType0 != null) {
                 cmdType = cmdType0;
-            } else if (Pattern.matches(COMMENTS_START_REGEX, line)) {
+            } else if (isComments(line)) {
                 comments = getComments(line);
             } else if (line.startsWith(CMD_STARTS)) {
                 cmd = getCmd(line);
@@ -61,6 +62,15 @@ public class HotKeyParser {
         }
     }
 
+    private static boolean isComments(String line) {
+        if (StringUtils.isBlank(line)) {
+            return false;
+        }
+        // "//"开头，且包含其他字符的就是注释
+        return line.startsWith(COMMENTS_START)
+                && StringUtils.isNotBlank(line.replaceAll("/", "").trim());
+    }
+
     private static Integer getCmdType(String line) {
         return Optional.ofNullable(CmdTypeEnum.fromTitle(line))
                 .map(CmdTypeEnum::getType)
@@ -68,7 +78,7 @@ public class HotKeyParser {
     }
 
     private static String getComments(String line) {
-        return line.replaceFirst(COMMENTS_START, "");
+        return line.replaceFirst(COMMENTS_START, "").trim();
     }
 
     private static String getCmd(String line) {

@@ -1,0 +1,36 @@
+AnchorPane {
+    -fx-pref-height: 460px;
+    -fx-pref-width: 670px;
+}
+
+#configPathInput {
+    -fx-pref-width: 440px;
+    -fx-pref-height: 23px;
+}
+
+#tableView {
+    -fx-pref-width: 539px;
+    -fx-pref-height: 344px;
+    -fx-layout-x: 66px;
+    -fx-layout-y: 71px;
+}
+
+#raceColumn {
+    -fx-pref-width: 67px;
+}
+
+#cmdTypeColumn {
+    -fx-pref-width: 94px;
+}
+
+#cmdColumn {
+    -fx-pref-width: 85px;
+}
+
+#cmdNameColumn {
+    -fx-pref-width: 218px;
+}
+
+#hotKeyColumn {
+    -fx-pref-width: 61px;
+}

@@ -18,9 +18,11 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.nio.charset.Charset;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -32,6 +34,9 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 public class HotKeyServiceImpl implements HotKeyService {
+
+    @Value("${translation.switch}")
+    private boolean translationSwitch;
 
     @Autowired private CmdHotKeyManager cmdHotKeyManager;
 
@@ -58,7 +63,7 @@ public class HotKeyServiceImpl implements HotKeyService {
                 refHotKeys.stream().map(this::buildDTO).collect(Collectors.toList());
 
         // 后台翻译(如果翻译的文本不完整的话)
-        newDaemonThread(() -> translationManager.machine(hotKeys)).start();
+        if (translationSwitch) newDaemonThread(() -> translationManager.machine(hotKeys)).start();
 
         return hotKeys;
     }
@@ -87,6 +92,8 @@ public class HotKeyServiceImpl implements HotKeyService {
             throw new RuntimeException("未找到要修改的配置文件路径");
         }
         CmdHotKeyDO target = cmdHotKeyManager.requireByCmd(cmd);
+
+        // TODO 格式校验
 
         // 热键冲突检测
         if (!force) checkConflict(pathname, target, hotKey);
@@ -154,12 +161,6 @@ public class HotKeyServiceImpl implements HotKeyService {
             return false;
         }
 
-        // 公共快捷键和其他快捷键会冲突
-        //        if (CmdTypeEnum.Shared.getType().equals(target.getCmdType())
-        //                || CmdTypeEnum.Shared.getType().equals(may.getCmdType())) {
-        //            return true;
-        //        }
-
         // 同类型快捷键会冲突
         return Objects.equals(target.getCmdType(), may.getCmdType().getType());
     }
@@ -180,7 +181,10 @@ public class HotKeyServiceImpl implements HotKeyService {
                 .cmd(refHotKey.getCmd())
                 .comments(refHotKey.getComments())
                 .cmdType(CmdTypeEnum.from(refHotKey.getCmdType()))
-                .translation(translations.getProperty(refHotKey.getCmd()))
+                .translation(
+                        translationSwitch
+                                ? translations.getProperty(refHotKey.getCmd())
+                                : refHotKey.getComments())
                 .hotKey(refHotKey.getHotKey())
                 .build();
     }

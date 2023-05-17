@@ -70,7 +70,7 @@ public class CmdHotKeyManager {
         sequenceMapper.resetSequence(SequenceMapper.CMD_HOT_KEY);
     }
 
-    // ******************************** 自定义配置文件操作 ******************************** //
+    // ******************************** CustomKeys.txt 文件操作 ******************************** //
 
     /**
      * 读取快捷键
@@ -89,10 +89,8 @@ public class CmdHotKeyManager {
             // 进行快捷键读取
             return HotKeyParser.parse(reader);
 
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException("自定义快捷键配置未找到，请检查配置文件路径");
         } catch (IOException e) {
-            throw new RuntimeException("本地文件读取失败");
+            throw new RuntimeException("自定义快捷键配置未找到，请检查配置文件路径");
         }
     }
 
@@ -111,12 +109,18 @@ public class CmdHotKeyManager {
         String prefix = HotKeyParser.getHotKeyPrefix(target.getCmd());
 
         // 修改文件行
-        FileUtil.updateLine(
-                pathname, target.getRow(), prefix + target.getHotKey(), prefix + newHotKey);
+        try {
+            FileUtil.updateLine(
+                    pathname, target.getRow(), prefix + target.getHotKey(), prefix + newHotKey);
+        } catch (IOException e) {
+            throw new RuntimeException("文件读取失败，请尝试重新加载");
+        }
 
         // 刷新数据库
         refresh(readHotKeys(pathname));
     }
+
+    // ******************************** 其他 ******************************** //
 
     private CmdHotKeyDO buildDO(RefHotKey refHotKey) {
         CmdHotKeyDO cmdHotKeyDO = new CmdHotKeyDO();

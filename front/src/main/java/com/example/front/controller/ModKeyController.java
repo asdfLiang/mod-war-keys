@@ -5,6 +5,7 @@ import com.example.back.service.HotKeyService;
 import com.example.back.service.RecordService;
 import com.example.back.service.TranslationService;
 import com.example.back.support.exceptions.HotKeyConflictException;
+import com.example.commons.exceptions.BaseException;
 import com.example.front.controller.action.AlertAction;
 import com.example.front.controller.cells.ClickCopyTextFiledTableCell;
 import com.example.front.controller.vo.CmdHotKeyVO;
@@ -142,7 +143,7 @@ public class ModKeyController implements Initializable {
                 reconfirmUpdate(event, true);
                 return;
             }
-        } catch (IllegalArgumentException | IllegalStateException e) {
+        } catch (BaseException e) {
             AlertAction.error(e.getMessage());
         }
 

@@ -2,21 +2,21 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.AnchorPane?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="460.0" prefWidth="670.0" xmlns="http://javafx.com/javafx/17"
-            fx:controller="com.example.front.controller.ModKeyController">
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/17"
+            fx:controller="com.example.front.controller.ModKeyController" stylesheets="@css/mod-key-view.css">
 
     <Button alignment="TOP_LEFT" layoutX="517.0" layoutY="35.0" onAction="#selectFile" text="选择配置文件"/>
 
-    <TextField fx:id="configPathInput" alignment="TOP_LEFT" disable="true" layoutX="66.0" layoutY="35.0"
-               prefHeight="23.0" prefWidth="440.0" promptText="配置文件路径"/>
+    <TextField fx:id="configPathInput" disable="true" layoutX="66.0" layoutY="35.0"
+               promptText="配置文件路径"/>
 
-    <TableView fx:id="tableView" layoutX="66.0" layoutY="71.0" prefHeight="344.0" prefWidth="539.0">
+    <TableView fx:id="tableView" layoutX="66.0" layoutY="71.0">
         <columns>
-            <TableColumn fx:id="raceColumn" prefWidth="67.0" sortable="false" text="种族"/>
-            <TableColumn fx:id="cmdTypeColumn" prefWidth="94.0" sortable="false" text="单位类型"/>
-            <TableColumn fx:id="cmdColumn" prefWidth="85.0" sortable="false" text="指令"/>
-            <TableColumn fx:id="cmdNameColumn" prefWidth="218.0" sortable="false" text="指令名称"/>
-            <TableColumn fx:id="hotKeyColumn" prefWidth="61.0" sortable="false" text="快捷键"/>
+            <TableColumn fx:id="raceColumn" sortable="false" text="种族"/>
+            <TableColumn fx:id="cmdTypeColumn" sortable="false" text="单位类型"/>
+            <TableColumn fx:id="cmdColumn" sortable="false" text="指令"/>
+            <TableColumn fx:id="cmdNameColumn" sortable="false" text="指令名称"/>
+            <TableColumn fx:id="hotKeyColumn" sortable="false" text="快捷键"/>
         </columns>
     </TableView>
 
