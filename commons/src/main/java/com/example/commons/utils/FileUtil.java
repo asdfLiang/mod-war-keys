@@ -10,7 +10,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -30,16 +29,11 @@ public class FileUtil {
         }
 
         try {
-            URL resource = FileUtil.class.getResource(pathname);
-            if (Objects.isNull(resource)) {
-                log.error("current classLoader path: {}", Objects.requireNonNull(FileUtil.class.getClassLoader().getResource("/")).getPath());
-                throw new RuntimeException("");
-            }
+            File file = new File(pathname);
 
-            log.info("当前路径：{}", resource.getPath());
-            return Paths.get(resource.toURI());
+            return Paths.get(file.getParent(), file.getName());
         } catch (Exception e) {
-            log.warn("路径未找到, root: {}, pathname: {}", new File("").getAbsolutePath(), pathname, e);
+            log.warn("路径未找到, pathname: {}", pathname, e);
             throw new PathNotFoundException("文件路径未找到!");
         }
     }

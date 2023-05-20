@@ -22,7 +22,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.nio.charset.Charset;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -63,7 +62,7 @@ public class HotKeyServiceImpl implements HotKeyService {
                 refHotKeys.stream().map(this::buildDTO).collect(Collectors.toList());
 
         // 后台翻译(如果翻译的文本不完整的话)
-        if (translationSwitch) newDaemonThread(() -> translationManager.machine(hotKeys)).start();
+        if (translationSwitch) newDaemonThread(() -> translationManager.auto(hotKeys)).start();
 
         return hotKeys;
     }

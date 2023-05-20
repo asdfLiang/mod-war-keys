@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import java.io.File;
 import java.nio.file.Path;
 import java.util.*;
 
@@ -28,27 +27,23 @@ public class TranslationManager {
     @Value("${translation.pathname}")
     private String pathname;
 
-    @Value("${translation.default.filename}")
-    private String filename;
-
     @Autowired private TranslatorFactory translatorFactory;
 
-    /** 自动机翻，检查是否有未翻译的文本，如果有，进行翻译 */
-    public void machine(List<CmdHotKeyDTO> hotKeys) {
+    /** 自动机翻 */
+    public void auto(List<CmdHotKeyDTO> hotKeys) {
         if (CollectionUtils.isEmpty(hotKeys)) {
             return;
         }
 
-        Path path = FileUtil.getPath(obtainPathname());
         // 读取翻译文本
-        Properties local = PropertiesUtil.load(path);
+        Properties local = PropertiesUtil.load(pathname);
 
         // 翻译
         hotKeys.forEach(
                 vo -> {
                     if (!local.containsKey(vo.getCmd())) {
                         local.put(vo.getCmd(), translate(vo.getComments()));
-                        PropertiesUtil.store(path, local, "translation by " + engine);
+                        PropertiesUtil.store(pathname, local, "translation by " + engine);
                     }
                 });
     }
@@ -60,12 +55,12 @@ public class TranslationManager {
      * @param translation 翻译
      */
     public void manual(String cmd, String translation) {
-        Path path = FileUtil.getPath(obtainPathname());
+        Path path = FileUtil.getPath(pathname);
         // 读取翻译文本
-        Properties local = PropertiesUtil.load(path);
+        Properties local = PropertiesUtil.load(pathname);
 
         local.setProperty(cmd, translation);
-        PropertiesUtil.store(path, local, "manual update");
+        PropertiesUtil.store(pathname, local, "manual update");
     }
 
     /**
@@ -74,30 +69,12 @@ public class TranslationManager {
      * @return 本地翻译文件
      */
     public Properties getTranslations() {
-        return PropertiesUtil.load(FileUtil.getPath(obtainPathname()));
+        return PropertiesUtil.load(pathname);
     }
 
     private String translate(String key) {
         return translatorFactory
                 .get(TranslatorEnum.from(engine))
                 .translate(key, LanguageEnum.EN.name(), LanguageEnum.ZH.name());
-    }
-
-    private String obtainPathname() {
-        return pathname;
-
-        //        if (FileUtil.getPath(pathname).toFile().exists()) {
-        //            return pathname;
-        //        }
-        //
-        //        String localPath = new File("").getAbsolutePath() + "\\" + filename;
-        //        if (FileUtil.getPath(localPath).toFile().exists()) {
-        //            return localPath;
-        //        }
-        //
-        //        Properties properties = new Properties();
-        //        PropertiesUtil.store(FileUtil.getPath(localPath), properties, "system create");
-        //
-        //        return localPath;
     }
 }
