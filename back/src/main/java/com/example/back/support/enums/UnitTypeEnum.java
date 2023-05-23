@@ -13,9 +13,12 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum UnitTypeEnum {
     Shared(0, "通用"),
-    Units(1, "单位&技能"),
-    Bldgs(2, "建筑升级&技能"),
-    Heroes(3, "英雄&技能");
+    // 单位&技能
+    Units(1, "兵种"),
+    // 建筑升级&技能
+    Bldgs(2, "建筑"),
+    // 英雄&技能
+    Heroes(3, "英雄");
 
     private final Integer type;
 

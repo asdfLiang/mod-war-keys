@@ -1,8 +1,8 @@
 package com.example.back.manager;
 
 import com.example.back.manager.dto.CmdHotKeyDTO;
-import com.example.commons.utils.FileUtil;
-import com.example.commons.utils.PropertiesUtil;
+import com.example.back.support.transaction.PropertiesFactory;
+import com.example.back.support.transaction.PropertiesHandler;
 import com.example.transaction.TranslatorFactory;
 import com.example.transaction.enums.LanguageEnum;
 import com.example.transaction.enums.TranslatorEnum;
@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import java.nio.file.Path;
 import java.util.*;
 
 /**
@@ -21,6 +20,9 @@ import java.util.*;
  */
 @Component
 public class TranslationManager {
+    @Value("${env}")
+    private String env;
+
     @Value("${translation.engine}")
     private String engine;
 
@@ -29,21 +31,25 @@ public class TranslationManager {
 
     @Autowired private TranslatorFactory translatorFactory;
 
+    @Autowired private PropertiesFactory propertiesFactory;
+
     /** 自动机翻 */
     public void auto(List<CmdHotKeyDTO> hotKeys) {
         if (CollectionUtils.isEmpty(hotKeys)) {
             return;
         }
 
+        PropertiesHandler handler = propertiesFactory.getHandler(env);
+
         // 读取翻译文本
-        Properties local = PropertiesUtil.load(pathname);
+        Properties local = handler.load(pathname);
 
         // 翻译
         hotKeys.forEach(
                 vo -> {
                     if (!local.containsKey(vo.getCmd())) {
                         local.put(vo.getCmd(), translate(vo.getComments()));
-                        PropertiesUtil.store(pathname, local, "translation by " + engine);
+                        handler.store(pathname, local, "translation by " + engine);
                     }
                 });
     }
@@ -55,12 +61,13 @@ public class TranslationManager {
      * @param translation 翻译
      */
     public void manual(String cmd, String translation) {
-        Path path = FileUtil.getPath(pathname);
+        PropertiesHandler handler = propertiesFactory.getHandler(env);
+
         // 读取翻译文本
-        Properties local = PropertiesUtil.load(pathname);
+        Properties local = handler.load(pathname);
 
         local.setProperty(cmd, translation);
-        PropertiesUtil.store(pathname, local, "manual update");
+        handler.store(pathname, local, "manual update");
     }
 
     /**
@@ -69,7 +76,7 @@ public class TranslationManager {
      * @return 本地翻译文件
      */
     public Properties getTranslations() {
-        return PropertiesUtil.load(pathname);
+        return propertiesFactory.getHandler(env).load(pathname);
     }
 
     private String translate(String key) {

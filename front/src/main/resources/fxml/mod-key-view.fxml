@@ -2,10 +2,10 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.AnchorPane?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/17"
-            fx:controller="com.example.front.controller.ModKeyController" stylesheets="@css/mod-key-view.css">
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" stylesheets="@css/mod-key-view.css" xmlns="http://javafx.com/javafx/17"
+            fx:controller="com.example.front.controller.ModKeyController">
 
-    <Button alignment="TOP_LEFT" layoutX="517.0" layoutY="35.0" onAction="#selectFile" text="选择配置文件"/>
+    <Button alignment="TOP_LEFT" layoutX="565.0" layoutY="35.0" onAction="#selectFile" text="导入"/>
 
     <TextField fx:id="configPathInput" disable="true" layoutX="66.0" layoutY="35.0"
                promptText="配置文件路径"/>
