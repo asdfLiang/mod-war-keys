@@ -15,9 +15,9 @@ import java.util.Objects;
 @Component
 public class PropertiesFactory {
 
-    @Autowired private List<PropertiesHandler> handlers;
+    @Autowired private List<PropertiesTemplate> handlers;
 
-    public PropertiesHandler getHandler(String env) {
+    public PropertiesTemplate getTemplate(String env) {
         EnvEnum envEnum = EnvEnum.from(env);
 
         return handlers.stream()

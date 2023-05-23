@@ -2,7 +2,7 @@ package com.example.back.manager;
 
 import com.example.back.manager.dto.CmdHotKeyDTO;
 import com.example.back.support.transaction.PropertiesFactory;
-import com.example.back.support.transaction.PropertiesHandler;
+import com.example.back.support.transaction.PropertiesTemplate;
 import com.example.transaction.TranslatorFactory;
 import com.example.transaction.enums.LanguageEnum;
 import com.example.transaction.enums.TranslatorEnum;
@@ -39,17 +39,17 @@ public class TranslationManager {
             return;
         }
 
-        PropertiesHandler handler = propertiesFactory.getHandler(env);
+        PropertiesTemplate template = propertiesFactory.getTemplate(env);
 
         // 读取翻译文本
-        Properties local = handler.load(pathname);
+        Properties local = template.load(pathname);
 
         // 翻译
         hotKeys.forEach(
                 vo -> {
                     if (!local.containsKey(vo.getCmd())) {
                         local.put(vo.getCmd(), translate(vo.getComments()));
-                        handler.store(pathname, local, "translation by " + engine);
+                        template.store(pathname, local, "translation by " + engine);
                     }
                 });
     }
@@ -61,13 +61,13 @@ public class TranslationManager {
      * @param translation 翻译
      */
     public void manual(String cmd, String translation) {
-        PropertiesHandler handler = propertiesFactory.getHandler(env);
+        PropertiesTemplate template = propertiesFactory.getTemplate(env);
 
         // 读取翻译文本
-        Properties local = handler.load(pathname);
+        Properties local = template.load(pathname);
 
         local.setProperty(cmd, translation);
-        handler.store(pathname, local, "manual update");
+        template.store(pathname, local, "manual update");
     }
 
     /**
@@ -76,7 +76,7 @@ public class TranslationManager {
      * @return 本地翻译文件
      */
     public Properties getTranslations() {
-        return propertiesFactory.getHandler(env).load(pathname);
+        return propertiesFactory.getTemplate(env).load(pathname);
     }
 
     private String translate(String key) {

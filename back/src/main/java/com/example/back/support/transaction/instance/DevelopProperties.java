@@ -1,14 +1,13 @@
 package com.example.back.support.transaction.instance;
 
 import com.example.back.support.enums.EnvEnum;
-import com.example.back.support.transaction.PropertiesHandler;
+import com.example.back.support.transaction.PropertiesTemplate;
 
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.stereotype.Component;
 
 import java.io.File;
-import java.util.Properties;
 
 /**
  * 开发环境properties处理器
@@ -18,7 +17,7 @@ import java.util.Properties;
  */
 @Slf4j
 @Component
-public class DevelopPropertiesHandler implements PropertiesHandler {
+public class DevelopProperties extends PropertiesTemplate {
     private static final String RESOURCES_PATH = "front/src/main/resources";
 
     @Override
@@ -27,14 +26,11 @@ public class DevelopPropertiesHandler implements PropertiesHandler {
     }
 
     @Override
-    public Properties load(String pathname) {
-        return PropertiesHandler.super.load(pathname);
-    }
-
-    @Override
-    public void store(String pathname, Properties properties, String comments) {
+    public String envPathname(String pathname) {
         String absolutePath = new File(RESOURCES_PATH + "/" + pathname).getAbsolutePath();
 
-        PropertiesHandler.super.store(absolutePath, properties, comments);
+        obtainPathname(absolutePath);
+
+        return absolutePath;
     }
 }
