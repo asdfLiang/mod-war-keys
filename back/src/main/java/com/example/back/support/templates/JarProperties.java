@@ -1,10 +1,10 @@
-package com.example.back.support.transaction.instance;
+package com.example.back.support.templates;
 
 import com.example.back.support.enums.EnvEnum;
-import com.example.back.support.transaction.PropertiesTemplate;
 
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 /**
@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
  */
 @Slf4j
 @Component
+@ConditionalOnProperty(name = {"env"}, havingValue = "prod")
 public class JarProperties extends PropertiesTemplate {
     @Override
     public EnvEnum env() {

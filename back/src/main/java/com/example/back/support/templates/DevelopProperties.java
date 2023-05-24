@@ -1,10 +1,10 @@
-package com.example.back.support.transaction.instance;
+package com.example.back.support.templates;
 
 import com.example.back.support.enums.EnvEnum;
-import com.example.back.support.transaction.PropertiesTemplate;
 
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
@@ -17,6 +17,7 @@ import java.io.File;
  */
 @Slf4j
 @Component
+@ConditionalOnProperty(name = {"env"}, havingValue = "dev")
 public class DevelopProperties extends PropertiesTemplate {
     private static final String RESOURCES_PATH = "front/src/main/resources";
 

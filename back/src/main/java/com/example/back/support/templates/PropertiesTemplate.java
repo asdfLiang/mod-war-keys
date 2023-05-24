@@ -1,4 +1,7 @@
-package com.example.back.support.transaction;
+package com.example.back.support.templates;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.util.Objects.requireNonNull;
 
 import com.example.back.support.enums.EnvEnum;
 import com.example.commons.exceptions.BaseException;
@@ -8,8 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.util.Objects;
 import java.util.Properties;
 
 /**
@@ -29,9 +30,8 @@ public abstract class PropertiesTemplate {
      */
     public Properties load(String name) {
         try (InputStream in = PropertiesTemplate.class.getClassLoader().getResourceAsStream(name);
-                InputStreamReader reader =
-                        new InputStreamReader(Objects.requireNonNull(in), StandardCharsets.UTF_8);
-                FileReader envReader = new FileReader(envPathname(name), StandardCharsets.UTF_8)) {
+                InputStreamReader reader = new InputStreamReader(requireNonNull(in), UTF_8);
+                FileReader envReader = new FileReader(envPathname(name), UTF_8)) {
             // 项目编译路径下的配置文件
             Properties properties = new Properties();
             properties.load(reader);
@@ -60,7 +60,7 @@ public abstract class PropertiesTemplate {
      */
     public void store(String name, Properties properties, String comments) {
         // 新增的翻译写到本地
-        try (FileWriter fw = new FileWriter(envPathname(name), StandardCharsets.UTF_8)) {
+        try (FileWriter fw = new FileWriter(envPathname(name), UTF_8)) {
             properties.store(fw, comments);
         } catch (IOException e) {
             throw new BaseException("properties写入异常", e);

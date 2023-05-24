@@ -1,8 +1,7 @@
 package com.example.back.manager;
 
 import com.example.back.manager.dto.CmdHotKeyDTO;
-import com.example.back.support.transaction.PropertiesFactory;
-import com.example.back.support.transaction.PropertiesTemplate;
+import com.example.back.support.templates.PropertiesTemplate;
 import com.example.transaction.TranslatorFactory;
 import com.example.transaction.enums.LanguageEnum;
 import com.example.transaction.enums.TranslatorEnum;
@@ -20,9 +19,6 @@ import java.util.*;
  */
 @Component
 public class TranslationManager {
-    @Value("${env}")
-    private String env;
-
     @Value("${translation.engine}")
     private String engine;
 
@@ -31,7 +27,7 @@ public class TranslationManager {
 
     @Autowired private TranslatorFactory translatorFactory;
 
-    @Autowired private PropertiesFactory propertiesFactory;
+    @Autowired private PropertiesTemplate propertiesTemplate;
 
     /** 自动机翻 */
     public void auto(List<CmdHotKeyDTO> hotKeys) {
@@ -39,17 +35,15 @@ public class TranslationManager {
             return;
         }
 
-        PropertiesTemplate template = propertiesFactory.getTemplate(env);
-
         // 读取翻译文本
-        Properties local = template.load(pathname);
+        Properties local = propertiesTemplate.load(pathname);
 
         // 翻译
         hotKeys.forEach(
                 vo -> {
                     if (!local.containsKey(vo.getCmd())) {
                         local.put(vo.getCmd(), translate(vo.getComments()));
-                        template.store(pathname, local, "translation by " + engine);
+                        propertiesTemplate.store(pathname, local, "translation by " + engine);
                     }
                 });
     }
@@ -61,13 +55,12 @@ public class TranslationManager {
      * @param translation 翻译
      */
     public void manual(String cmd, String translation) {
-        PropertiesTemplate template = propertiesFactory.getTemplate(env);
 
         // 读取翻译文本
-        Properties local = template.load(pathname);
+        Properties local = propertiesTemplate.load(pathname);
 
         local.setProperty(cmd, translation);
-        template.store(pathname, local, "manual update");
+        propertiesTemplate.store(pathname, local, "manual update");
     }
 
     /**
@@ -76,7 +69,7 @@ public class TranslationManager {
      * @return 本地翻译文件
      */
     public Properties getTranslations() {
-        return propertiesFactory.getTemplate(env).load(pathname);
+        return propertiesTemplate.load(pathname);
     }
 
     private String translate(String key) {
