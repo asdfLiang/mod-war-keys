@@ -13,8 +13,8 @@ import org.springframework.context.annotation.PropertySource;
 @SpringBootApplication(
         scanBasePackages = {
             "com.example.front",
-            "com.example.back",
-            "com.example.transaction",
+            "com.example.service",
+            "com.example.integrate",
             "com.example.dal",
         })
 @MapperScan(basePackages = {"com.example.dal.mapper"})

@@ -1,14 +1,14 @@
 package com.example.front.controller;
 
-import com.example.back.manager.dto.CmdHotKeyDTO;
-import com.example.back.service.HotKeyService;
-import com.example.back.service.RecordService;
-import com.example.back.service.TranslationService;
-import com.example.back.support.exceptions.HotKeyConflictException;
 import com.example.commons.exceptions.BaseException;
 import com.example.front.controller.action.AlertAction;
 import com.example.front.controller.cells.ClickCopyTextFiledTableCell;
 import com.example.front.controller.vo.CmdHotKeyVO;
+import com.example.service.HotKeyService;
+import com.example.service.RecordService;
+import com.example.service.TranslationService;
+import com.example.service.manager.dto.CmdHotKeyDTO;
+import com.example.service.support.exceptions.HotKeyConflictException;
 
 import de.felixroske.jfxsupport.AbstractJavaFxApplicationSupport;
 import de.felixroske.jfxsupport.FXMLController;
@@ -38,11 +38,10 @@ import java.util.ResourceBundle;
  */
 @FXMLController
 public class ModKeyController implements Initializable {
+    private final Stage stage = AbstractJavaFxApplicationSupport.getStage();
     @Autowired private HotKeyService hotKeyService;
     @Autowired private RecordService recordService;
     @Autowired private TranslationService translationService;
-
-    private final Stage stage = AbstractJavaFxApplicationSupport.getStage();
     @FXML private TextField configPathInput;
     @FXML private TableView<CmdHotKeyVO> tableView = new TableView<>();
     @FXML private TableColumn<CmdHotKeyVO, String> raceColumn = new TableColumn<>();

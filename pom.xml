@@ -18,8 +18,8 @@
     <modules>
         <module>front</module>
         <module>dal</module>
-        <module>back</module>
-        <module>translation</module>
+        <module>service</module>
+        <module>integrate</module>
         <module>commons</module>
     </modules>
 

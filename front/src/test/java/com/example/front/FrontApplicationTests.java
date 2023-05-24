@@ -1,8 +1,8 @@
 package com.example.front;
 
-//@SpringBootTest
+// @SpringBootTest
 class FrontApplicationTests {
 
-//    @Test
-//    void contextLoads() {}
+    //    @Test
+    //    void contextLoads() {}
 }
