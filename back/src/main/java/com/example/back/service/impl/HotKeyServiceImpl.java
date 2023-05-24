@@ -177,14 +177,14 @@ public class HotKeyServiceImpl implements HotKeyService {
         Properties translations = translationManager.getTranslations();
 
         return CmdHotKeyDTO.builder()
-                .cmd(refHotKey.getCmd())
-                .comments(refHotKey.getComments())
-                .cmdType(CmdTypeEnum.from(refHotKey.getCmdType()))
+                .cmd(refHotKey.cmd())
+                .comments(refHotKey.comments())
+                .cmdType(CmdTypeEnum.from(refHotKey.cmdType()))
                 .translation(
                         translationSwitch
-                                ? translations.getProperty(refHotKey.getCmd())
-                                : refHotKey.getComments())
-                .hotKey(refHotKey.getHotKey())
+                                ? translations.getProperty(refHotKey.cmd())
+                                : refHotKey.comments())
+                .hotKey(refHotKey.hotKey())
                 .build();
     }
 }
