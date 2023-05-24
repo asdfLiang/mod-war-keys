@@ -2,18 +2,15 @@
 
 这是一个用Spring Boot + MyBatis + JavaFx 写的魔兽争霸3改键器
 
+# 功能说明
+
+本修改器基于CustomKeys.txt文件开发，主要功能是解析CustomKeys.txt文件并提供快捷键修改功能。由于会修改CustomKeys.txt文件，建议使用前先进行备份。
+
 # 使用说明
 
 1. 将CustomKeys.txt文件(注意备份)放到游戏安装目录"\\Warcraft III Frozen Throne\\"下
 2. 打开本修改器，对CustomKeys进行修改
 3. 打开游戏魔兽争霸3，在游戏内进入"选项 -> 游戏性"菜单, 勾选"自定义快捷键"，改键即可生效
-
-# 功能说明
-
-1. CustomKeys.txt文件解析，本修改器基于CustomKeys.txt文件目前的结构进行解析的
-2. 快捷键修改(注意进行备份)，本修改器会修改CustomKeys.txt中的内容，所以注意做好备份
-3. 自动机翻，改建器本身有一份汉化文本，但如果丢失或新增内容，也可以后台进行自动机翻
-4. 手动修正翻译，支持在界面上修正翻译文本
 
 # 环境说明
 
