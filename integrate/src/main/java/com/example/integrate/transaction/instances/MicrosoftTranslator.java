@@ -2,7 +2,7 @@ package com.example.integrate.transaction.instances;
 
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
-import com.example.commons.utils.HttpUtil;
+import com.example.common.utils.HttpUtil;
 import com.example.integrate.transaction.Translator;
 import com.example.integrate.transaction.TranslatorTemplate;
 import com.example.integrate.transaction.enums.TranslatorEnum;

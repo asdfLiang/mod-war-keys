@@ -1,4 +1,4 @@
-package com.example.commons.exceptions;
+package com.example.common.exceptions;
 /**
  * @since 2023/5/16 22:56
  * @author by liangzj

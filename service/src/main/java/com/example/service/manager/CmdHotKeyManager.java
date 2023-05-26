@@ -1,6 +1,6 @@
 package com.example.service.manager;
 
-import com.example.commons.utils.FileUtil;
+import com.example.common.utils.FileUtil;
 import com.example.dal.entity.CmdHotKeyDO;
 import com.example.dal.entity.RefHotKey;
 import com.example.dal.mapper.CmdHotKeyMapper;

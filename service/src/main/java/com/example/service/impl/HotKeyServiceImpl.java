@@ -1,8 +1,8 @@
 package com.example.service.impl;
 
-import static com.example.commons.utils.ThreadUtil.newDaemonThread;
+import static com.example.common.utils.ThreadUtil.newDaemonThread;
 
-import com.example.commons.utils.FileUtil;
+import com.example.common.utils.FileUtil;
 import com.example.dal.entity.CmdHotKeyDO;
 import com.example.dal.entity.RefHotKey;
 import com.example.service.HotKeyService;

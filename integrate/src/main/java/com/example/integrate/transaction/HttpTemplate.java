@@ -1,6 +1,6 @@
 package com.example.integrate.transaction;
 
-import com.example.commons.utils.HttpUtil;
+import com.example.common.utils.HttpUtil;
 
 import java.net.http.HttpResponse;
 import java.util.Map;

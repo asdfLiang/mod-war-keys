@@ -1,8 +1,8 @@
-package com.example.commons.utils;
+package com.example.common.utils;
 
-import com.example.commons.exceptions.FileExpireException;
-import com.example.commons.exceptions.FileLineOutOfBoundsException;
-import com.example.commons.exceptions.PathNotFoundException;
+import com.example.common.exceptions.FileExpireException;
+import com.example.common.exceptions.FileLineOutOfBoundsException;
+import com.example.common.exceptions.PathNotFoundException;
 
 import lombok.extern.slf4j.Slf4j;
 

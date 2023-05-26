@@ -1,6 +1,6 @@
 package com.example.service.support.exceptions;
 
-import com.example.commons.exceptions.BaseException;
+import com.example.common.exceptions.BaseException;
 
 /**
  * @since 2023/5/16 23:21

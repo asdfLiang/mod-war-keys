@@ -1,6 +1,6 @@
 package com.example.integrate.transaction;
 
-import com.example.commons.utils.ThreadUtil;
+import com.example.common.utils.ThreadUtil;
 
 import org.apache.commons.lang3.StringUtils;
 

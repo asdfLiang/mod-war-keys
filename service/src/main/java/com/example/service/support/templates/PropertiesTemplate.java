@@ -3,7 +3,7 @@ package com.example.service.support.templates;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Objects.requireNonNull;
 
-import com.example.commons.exceptions.BaseException;
+import com.example.common.exceptions.BaseException;
 
 import lombok.extern.slf4j.Slf4j;
 

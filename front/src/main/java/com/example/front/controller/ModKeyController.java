@@ -1,6 +1,6 @@
 package com.example.front.controller;
 
-import com.example.commons.exceptions.BaseException;
+import com.example.common.exceptions.BaseException;
 import com.example.front.controller.action.AlertAction;
 import com.example.front.controller.cells.ClickCopyTextFiledTableCell;
 import com.example.front.controller.vo.CmdHotKeyVO;
