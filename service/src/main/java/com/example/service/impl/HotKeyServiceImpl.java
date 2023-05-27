@@ -12,6 +12,7 @@ import com.example.service.manager.TranslationManager;
 import com.example.service.manager.dto.CmdHotKeyDTO;
 import com.example.service.support.enums.CmdTypeEnum;
 import com.example.service.support.enums.RaceEnum;
+import com.example.service.support.exceptions.BaseBizException;
 import com.example.service.support.exceptions.HotKeyConflictException;
 
 import lombok.extern.slf4j.Slf4j;
@@ -46,13 +47,13 @@ public class HotKeyServiceImpl implements HotKeyService {
     @Override
     public List<CmdHotKeyDTO> load(String configFilePath) {
         if (!FileUtil.isText(configFilePath)) {
-            throw new RuntimeException("配置文件格式异常，请检查！");
+            throw new BaseBizException("配置文件格式异常，请检查！");
         }
 
         // 读取配置文件
         List<RefHotKey> refHotKeys = cmdHotKeyManager.readHotKeys(configFilePath);
         if (CollectionUtils.isEmpty(refHotKeys)) {
-            throw new RuntimeException("配置文件为空！");
+            throw new BaseBizException("配置文件为空！");
         }
 
         // 刷新加载记录
@@ -88,7 +89,7 @@ public class HotKeyServiceImpl implements HotKeyService {
 
         String pathname = loadRecordManager.latestPathname();
         if (StringUtils.isBlank(pathname)) {
-            throw new RuntimeException("未找到要修改的配置文件路径");
+            throw new BaseBizException("未找到要修改的配置文件");
         }
         CmdHotKeyDO target = cmdHotKeyManager.requireByCmd(cmd);
 

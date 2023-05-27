@@ -22,6 +22,8 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import lombok.extern.slf4j.Slf4j;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
@@ -36,6 +38,7 @@ import java.util.ResourceBundle;
  * @since 2023/3/23 0:43
  * @author by liangzj
  */
+@Slf4j
 @FXMLController
 public class ModKeyController implements Initializable {
     private final Stage stage = AbstractJavaFxApplicationSupport.getStage();
@@ -52,26 +55,41 @@ public class ModKeyController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        bindColumnData();
+        try {
+            bindColumnData();
 
-        // 打开界面时读取最近加载的配置文件
-        configPathInput.setText(recordService.latestPathname());
+            // 打开界面时读取最近加载的配置文件
+            configPathInput.setText(recordService.latestPathname());
 
-        refreshColumnData();
+            refreshColumnData();
+        } catch (BaseException e) {
+            log.error("initialize error. ", e);
+            AlertAction.error("初始化异常：" + e.getMessage());
+        } catch (Exception e) {
+            log.error("initialize error. ", e);
+            AlertAction.error("未知异常");
+        }
     }
 
     @FXML
     protected void selectFile() {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("打开");
-        File file = fileChooser.showOpenDialog(stage);
-        if (Objects.isNull(file) || StringUtils.isBlank(file.getAbsolutePath())) {
-            return;
+        try {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("打开");
+            File file = fileChooser.showOpenDialog(stage);
+            if (Objects.isNull(file) || StringUtils.isBlank(file.getAbsolutePath())) {
+                return;
+            }
+
+            configPathInput.setText(file.getAbsolutePath());
+
+            refreshColumnData();
+        } catch (BaseException e) {
+            AlertAction.error("文件导入异常：" + e.getMessage());
+        } catch (Exception e) {
+            log.error("select file error. ", e);
+            AlertAction.error("未知异常");
         }
-
-        configPathInput.setText(file.getAbsolutePath());
-
-        refreshColumnData();
     }
 
     @FXML

@@ -6,6 +6,8 @@ import com.example.integrate.transaction.enums.TranslatorEnum;
 import com.example.service.manager.dto.CmdHotKeyDTO;
 import com.example.service.support.templates.PropertiesTemplate;
 
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -17,6 +19,7 @@ import java.util.*;
  * @since 2023/3/25 12:41
  * @author by liangzj
  */
+@Slf4j
 @Component
 public class TranslationManager {
     @Value("${translation.engine}")
@@ -38,14 +41,18 @@ public class TranslationManager {
         // 读取翻译文本
         Properties local = propertiesTemplate.load(pathname);
 
-        // 翻译
-        hotKeys.forEach(
-                vo -> {
-                    if (!local.containsKey(vo.getCmd())) {
-                        local.put(vo.getCmd(), translate(vo.getComments()));
-                        propertiesTemplate.store(pathname, local, "translation by " + engine);
-                    }
-                });
+        try {
+            // 翻译
+            hotKeys.forEach(
+                    vo -> {
+                        if (!local.containsKey(vo.getCmd())) {
+                            local.put(vo.getCmd(), translate(vo.getComments()));
+                            propertiesTemplate.store(pathname, local, "translation by " + engine);
+                        }
+                    });
+        } catch (Exception e) {
+            log.warn("自动翻译失败", e);
+        }
     }
 
     /**

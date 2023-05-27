@@ -6,6 +6,7 @@ import com.example.dal.entity.RefHotKey;
 import com.example.dal.mapper.CmdHotKeyMapper;
 import com.example.dal.mapper.SequenceMapper;
 import com.example.service.support.HotKeyParser;
+import com.example.service.support.exceptions.BaseBizException;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -61,7 +62,7 @@ public class CmdHotKeyManager {
         }
 
         return Optional.ofNullable(cmdHotKeyMapper.selectByCmd(cmd))
-                .orElseThrow(() -> new RuntimeException("要修改的热键信息不存在"));
+                .orElseThrow(() -> new BaseBizException("要修改的热键未找到"));
     }
 
     /** 清理快捷键记录 */
@@ -90,7 +91,7 @@ public class CmdHotKeyManager {
             return HotKeyParser.parse(reader);
 
         } catch (IOException e) {
-            throw new RuntimeException("自定义快捷键配置未找到，请检查配置文件路径");
+            throw new BaseBizException("自定义快捷键配置未找到，请检查配置文件路径");
         }
     }
 
@@ -113,7 +114,7 @@ public class CmdHotKeyManager {
             FileUtil.updateLine(
                     pathname, target.getRow(), prefix + target.getHotKey(), prefix + newHotKey);
         } catch (IOException e) {
-            throw new RuntimeException("文件读取失败，请尝试重新加载");
+            throw new BaseBizException("文件读取失败，请尝试重新导入");
         }
 
         // 刷新数据库

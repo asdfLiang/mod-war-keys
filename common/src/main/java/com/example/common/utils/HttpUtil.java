@@ -1,5 +1,9 @@
 package com.example.common.utils;
 
+import com.example.common.exceptions.BaseException;
+
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.util.CollectionUtils;
 
 import java.io.IOException;
@@ -14,6 +18,7 @@ import java.util.stream.Collectors;
  * @since 2023/3/25 13:43
  * @author by liangzj
  */
+@Slf4j
 public class HttpUtil {
 
     /**
@@ -37,7 +42,8 @@ public class HttpUtil {
             // 请求
             return HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
         } catch (IOException | InterruptedException e) {
-            throw new RuntimeException(e);
+            log.error("http post error, uri: {}, headers: {}, body: {}", uri, headers, body, e);
+            throw new BaseException("post请求异常");
         }
     }
 
@@ -71,7 +77,8 @@ public class HttpUtil {
             // 请求
             return HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
         } catch (IOException | InterruptedException e) {
-            throw new RuntimeException(e);
+            log.error("http post error, uri: {}, headers: {}, params: {}", uri, headers, params, e);
+            throw new BaseException("get请求异常");
         }
     }
 }
