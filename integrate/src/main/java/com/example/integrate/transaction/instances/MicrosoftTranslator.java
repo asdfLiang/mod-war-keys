@@ -3,9 +3,9 @@ package com.example.integrate.transaction.instances;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
 import com.example.common.utils.HttpUtil;
+import com.example.integrate.transaction.AbstractTranslator;
 import com.example.integrate.transaction.Translator;
-import com.example.integrate.transaction.TranslatorTemplate;
-import com.example.integrate.transaction.enums.TranslatorEnum;
+import com.example.integrate.transaction.enums.TranslationEngineEnum;
 
 import org.springframework.stereotype.Component;
 
@@ -17,7 +17,7 @@ import java.util.*;
  * @author by liangzj
  */
 @Component
-public class MicrosoftTranslator extends TranslatorTemplate implements Translator {
+public class MicrosoftTranslator extends AbstractTranslator implements Translator {
     private static final String authUrl = "https://edge.microsoft.com/translate/auth";
 
     private static String authorization = null;
@@ -39,7 +39,7 @@ public class MicrosoftTranslator extends TranslatorTemplate implements Translato
     }
 
     @Override
-    protected String preparedBody(Map<String, String> params) {
+    protected String jsonRequestBody(Map<String, String> params) {
         String text = params.get("text");
 
         List<Object> list = new ArrayList<>();
@@ -51,7 +51,7 @@ public class MicrosoftTranslator extends TranslatorTemplate implements Translato
     }
 
     @Override
-    protected String parseResponseBody(HttpResponse<String> response) {
+    protected String analysisResponseBody(HttpResponse<String> response) {
         return JSONArray.parse(response.body())
                 .getJSONObject(0)
                 .getJSONArray("translations")
@@ -60,8 +60,17 @@ public class MicrosoftTranslator extends TranslatorTemplate implements Translato
     }
 
     @Override
-    public TranslatorEnum type() {
-        return TranslatorEnum.Microsoft;
+    public TranslationEngineEnum engine() {
+        return TranslationEngineEnum.Microsoft;
+    }
+
+    @Override
+    public String translate(String text, String from, String to) {
+        HashMap<String, String> params = new HashMap<>();
+        params.put("text", text);
+        params.put("from", from);
+        params.put("to", to);
+        return postTranslate(params);
     }
 
     private String getAuthorization() {

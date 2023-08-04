@@ -1,6 +1,6 @@
 package com.example.integrate.transaction;
 
-import com.example.integrate.transaction.enums.TranslatorEnum;
+import com.example.integrate.transaction.enums.TranslationEngineEnum;
 
 /**
  * 翻译器
@@ -10,7 +10,7 @@ import com.example.integrate.transaction.enums.TranslatorEnum;
  */
 public interface Translator {
 
-    TranslatorEnum type();
+    TranslationEngineEnum engine();
 
     /**
      * 翻译文本

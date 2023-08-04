@@ -1,9 +1,9 @@
 package com.example.integrate.transaction.instances;
 
 import com.alibaba.fastjson2.JSON;
+import com.example.integrate.transaction.AbstractTranslator;
 import com.example.integrate.transaction.Translator;
-import com.example.integrate.transaction.TranslatorTemplate;
-import com.example.integrate.transaction.enums.TranslatorEnum;
+import com.example.integrate.transaction.enums.TranslationEngineEnum;
 
 import org.springframework.stereotype.Component;
 
@@ -16,13 +16,23 @@ import java.util.Map;
  * @author by liangzj
  */
 @Component
-public class DeepLTranslator extends TranslatorTemplate implements Translator {
+public class DeepLTranslator extends AbstractTranslator implements Translator {
 
     private static final String URL = "https://www2.deepl.com/jsonrpc?method=LMT_handle_jobs";
 
     @Override
-    public TranslatorEnum type() {
-        return TranslatorEnum.DeepL;
+    public TranslationEngineEnum engine() {
+        return TranslationEngineEnum.DeepL;
+    }
+
+    @Override
+    public String translate(String text, String from, String to) {
+        HashMap<String, String> params = new HashMap<>();
+        params.put("text", text);
+        params.put("from", from);
+        params.put("to", to);
+
+        return postTranslate(params);
     }
 
     @Override
@@ -40,7 +50,7 @@ public class DeepLTranslator extends TranslatorTemplate implements Translator {
     }
 
     @Override
-    protected String preparedBody(Map<String, String> params) {
+    protected String jsonRequestBody(Map<String, String> params) {
         String text = params.get("text");
         String to = params.get("to");
 
@@ -48,7 +58,7 @@ public class DeepLTranslator extends TranslatorTemplate implements Translator {
     }
 
     @Override
-    protected String parseResponseBody(HttpResponse<String> response) {
+    protected String analysisResponseBody(HttpResponse<String> response) {
         return JSON.parseObject(response.body())
                 .getJSONObject("result")
                 .getJSONArray("translations")

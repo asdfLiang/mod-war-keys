@@ -2,7 +2,7 @@ package com.example.service.manager;
 
 import com.example.integrate.transaction.TranslatorFactory;
 import com.example.integrate.transaction.enums.LanguageEnum;
-import com.example.integrate.transaction.enums.TranslatorEnum;
+import com.example.integrate.transaction.enums.TranslationEngineEnum;
 import com.example.service.manager.dto.CmdHotKeyDTO;
 import com.example.service.support.templates.PropertiesTemplate;
 
@@ -81,7 +81,7 @@ public class TranslationManager {
 
     private String translate(String key) {
         return translatorFactory
-                .get(TranslatorEnum.from(engine))
+                .get(TranslationEngineEnum.from(engine))
                 .translate(key, LanguageEnum.EN.name(), LanguageEnum.ZH.name());
     }
 }

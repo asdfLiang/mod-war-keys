@@ -1,6 +1,6 @@
 package com.example.integrate.transaction;
 
-import com.example.integrate.transaction.enums.TranslatorEnum;
+import com.example.integrate.transaction.enums.TranslationEngineEnum;
 
 import org.springframework.stereotype.Component;
 
@@ -22,9 +22,9 @@ public class TranslatorFactory {
     }
 
     /** 获取翻译器 */
-    public Translator get(TranslatorEnum translatorEnum) {
+    public Translator get(TranslationEngineEnum translatorEnum) {
         return translators.stream()
-                .filter(translator -> Objects.equals(translatorEnum, translator.type()))
+                .filter(translator -> Objects.equals(translatorEnum, translator.engine()))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("未知翻译器"));
     }

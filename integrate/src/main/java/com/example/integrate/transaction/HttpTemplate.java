@@ -6,7 +6,7 @@ import java.net.http.HttpResponse;
 import java.util.Map;
 
 /**
- * post请求模板
+ * http请求模板
  *
  * @since 2023/3/25 14:23
  * @author by liangzj
@@ -18,7 +18,7 @@ public abstract class HttpTemplate {
     }
 
     protected HttpResponse<String> post(Map<String, String> params) {
-        return HttpUtil.post(uri(), headers(), preparedBody(params));
+        return HttpUtil.post(uri(), headers(), jsonRequestBody(params));
     }
 
     /** 请求uri */
@@ -33,8 +33,8 @@ public abstract class HttpTemplate {
      * @param params 动态参数
      * @return 求体json
      */
-    protected abstract String preparedBody(Map<String, String> params);
+    protected abstract String jsonRequestBody(Map<String, String> params);
 
     /** 解析请求结果 */
-    protected abstract String parseResponseBody(HttpResponse<String> response);
+    protected abstract String analysisResponseBody(HttpResponse<String> response);
 }

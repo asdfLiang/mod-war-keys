@@ -1,10 +1,10 @@
 package com.example.integrate.transaction.instances;
 
 import com.alibaba.fastjson2.JSON;
+import com.example.integrate.transaction.AbstractTranslator;
 import com.example.integrate.transaction.Translator;
-import com.example.integrate.transaction.TranslatorTemplate;
 import com.example.integrate.transaction.config.TranslationConfig;
-import com.example.integrate.transaction.enums.TranslatorEnum;
+import com.example.integrate.transaction.enums.TranslationEngineEnum;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -21,14 +21,14 @@ import java.util.Map;
  * @author by liangzj
  */
 @Component
-public class BaiduTranslator extends TranslatorTemplate implements Translator {
-
+public class BaiduTranslator extends AbstractTranslator implements Translator {
     private final String contentType = "application/x-www-form-urlencoded";
+
     @Autowired private TranslationConfig translationConfig;
 
     @Override
-    public TranslatorEnum type() {
-        return TranslatorEnum.Baidu;
+    public TranslationEngineEnum engine() {
+        return TranslationEngineEnum.Baidu;
     }
 
     @Override
@@ -40,7 +40,8 @@ public class BaiduTranslator extends TranslatorTemplate implements Translator {
         query.put("appid", translationConfig.baiduAppId);
         query.put("salt", "1435660288");
         query.put("sign", sign(query));
-        return parseResponseBody(get(query));
+
+        return getTranslate(query);
     }
 
     @Override
@@ -58,12 +59,12 @@ public class BaiduTranslator extends TranslatorTemplate implements Translator {
     }
 
     @Override
-    protected String preparedBody(Map<String, String> params) {
+    protected String jsonRequestBody(Map<String, String> params) {
         return null;
     }
 
     @Override
-    protected String parseResponseBody(HttpResponse<String> response) {
+    protected String analysisResponseBody(HttpResponse<String> response) {
         return JSON.parseObject(response.body())
                 .getJSONArray("trans_result")
                 .getJSONObject(0)
